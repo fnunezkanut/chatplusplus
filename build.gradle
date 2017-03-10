@@ -1,12 +1,10 @@
 buildscript {
-	ext {
-		springBootVersion = '1.5.2.RELEASE'
-	}
 	repositories {
 		mavenCentral()
 	}
 	dependencies {
-		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+		classpath('org.springframework.boot:spring-boot-gradle-plugin:1.5.2.RELEASE')
+		classpath('org.springframework:springloaded:1.2.6.RELEASE')
 	}
 }
 
@@ -14,19 +12,63 @@ apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'org.springframework.boot'
 
+
+//gets a formatted date
+def getDate() {
+	def date = new Date()
+	def formattedDate = date.format('yyyyMMddHHmmss')
+	return formattedDate
+}
+
 jar {
 	baseName = 'chatplusplus'
-	version = '0.0.1-SNAPSHOT'
+	version = "v0.2-build-${getDate()}"
 }
 
 sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
 
 repositories {
 	mavenCentral()
+	jcenter()
 }
 
 
 dependencies {
-	compile('org.springframework.boot:spring-boot-starter-web')
-	testCompile('org.springframework.boot:spring-boot-starter-test')
+
+	compile(
+			'org.jtwig:jtwig-spring-boot-starter:5.+',
+			'org.jtwig:jtwig-hot-reloading-extension:5.+',
+			'org.jtwig:jtwig-spring-asset-extension:5.+',
+			'org.springframework.boot:spring-boot-starter-web',
+			'org.springframework.boot:spring-boot-starter-web-services',
+			'org.springframework.boot:spring-boot-starter-websocket',
+			'org.springframework.boot:spring-boot-devtools',
+			'org.springframework:spring-context:4.3.6.RELEASE',
+			'org.springframework:spring-jdbc:4.3.6.RELEASE',
+			'org.springframework.boot:spring-boot-starter-data-redis',
+			'org.springframework.session:spring-session:1.3.0.RELEASE',
+			'org.apache.commons:commons-dbcp2:2.1.1',
+
+			'org.webjars:sockjs-client:1.1.2',
+			'org.webjars:stomp-websocket:2.3.3',
+			'org.webjars:momentjs:2.17.1',
+			'org.webjars:bootstrap:3.3.7-1',
+			'org.webjars:html5shiv:3.7.3',
+			'org.webjars:respond:1.4.2',
+			'org.webjars:jquery:3.1.1-1'
+	)
+
+
+	runtime(
+			'mysql:mysql-connector-java:6.0.5'
+	)
+
+	testCompile(
+			'org.springframework.boot:spring-boot-starter-test',
+			'org.springframework:spring-test:4.3.6.RELEASE',
+			'junit:junit:4.12',
+			'org.hamcrest:hamcrest-library:1.3'
+	)
 }
