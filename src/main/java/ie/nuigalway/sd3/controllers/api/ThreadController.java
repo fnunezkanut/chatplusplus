@@ -1,7 +1,5 @@
 package ie.nuigalway.sd3.controllers.api;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import ie.nuigalway.sd3.ApplicationException;
 import ie.nuigalway.sd3.ApplicationResponse;
 import ie.nuigalway.sd3.entities.Thread;
@@ -9,7 +7,6 @@ import ie.nuigalway.sd3.entities.User;
 import ie.nuigalway.sd3.services.ThreadService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -35,10 +32,7 @@ public class ThreadController {
             consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE,
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE
     )
-    public ApplicationResponse createThread(
-            HttpSession session,
-            @RequestParam("title") String title
-    ) {
+    public ApplicationResponse createThread(HttpSession session, @RequestParam("title") String title) {
 
         //check current user is signed in
         User currentUser = (User) session.getAttribute("currentUser");
@@ -75,7 +69,7 @@ public class ThreadController {
     )
     public ApplicationResponse getThreads(HttpSession session) {
 
-		/*
+
         //check current user is signed in
 		User currentUser = (User) session.getAttribute( "currentUser" );
 		if ( currentUser == null ) {
@@ -89,9 +83,10 @@ public class ThreadController {
 
 			throw new ApplicationException("Current user is not a support person");
 		}
-		*/
 
 
+
+		//fetch all threads from database
         List<Thread> threads;
         try {
 
@@ -103,25 +98,17 @@ public class ThreadController {
         }
 
 
-        Map<String,Object> threadMap = new HashMap<String, Object>();
+        //convert from a Thread list to a hashmap using java8 streams
+        Map<String, Object> threadMap = threads.stream().collect(
 
-        threadMap = threads.stream().collect( Collectors.toMap( x -> x.getId().toString(), x -> x ) );
+                Collectors.toMap(x -> x.getId().toString(), x -> x)
+        );
 
+
+        //return it all as a JSON response
         ApplicationResponse r = new ApplicationResponse("ok", "fetched");
-        r.setPayload( (HashMap<String, Object>) threadMap );
+        r.setPayload((HashMap<String, Object>) threadMap);
         return r;
-
-/*
-        ObjectMapper mapper = new ObjectMapper();
-        String json = null;
-        try {
-            json = mapper.writeValueAsString(r);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
-
-        return json;
-        */
     }
 
 }

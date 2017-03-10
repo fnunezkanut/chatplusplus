@@ -15,7 +15,7 @@ public class ApplicationAdvice {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(value = ApplicationException.class)
     public ApplicationResponse handleNotFoundException(ApplicationException e) {
-        return new ApplicationResponse("error", e.getMessage()).noPayload();
+        return new ApplicationResponse("error", e.getMessage());
     }
     //returns JSON error on a ApplicationException
 

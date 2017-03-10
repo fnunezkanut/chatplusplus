@@ -1,18 +1,17 @@
+/**
+ * @file ApplicationResponse.java
+ *
+ * envelope wrapper around json responses, with a status, message and payload fields
+ */
+
 package ie.nuigalway.sd3;
 
-import java.io.Serializable;
 import java.util.HashMap;
 
-public class ApplicationResponse implements Serializable{
+public class ApplicationResponse{
 
     private String status = "error";
     private String message = "";
-
-
-    public HashMap<String, Object> getPayload() {
-        return payload;
-    }
-
     private HashMap<String, Object> payload = new HashMap<>();
 
 
@@ -24,13 +23,6 @@ public class ApplicationResponse implements Serializable{
 
     public String getStatus() {
         return status;
-    }
-
-    //removes payload
-    public ApplicationResponse noPayload() {
-
-        this.payload = null;
-        return this;
     }
 
     //sets status, either ok or error
@@ -57,7 +49,11 @@ public class ApplicationResponse implements Serializable{
         this.payload = payload;
     }
 
+    public HashMap<String, Object> getPayload() {
+        return payload;
+    }
 
+    //add entry to payload
     public void put(String key, Object val) {
         this.payload.put(key, val);
     }

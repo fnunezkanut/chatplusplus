@@ -19,10 +19,7 @@ public class Homepage {
     String app_BASE_URL;
 
     @RequestMapping("/")
-    public ModelAndView action(
-            ModelMap model,
-            HttpSession session
-    ) {
+    public ModelAndView action(ModelMap model, HttpSession session) {
 
 
         //get current user from session
@@ -33,7 +30,7 @@ public class Homepage {
             model.addAttribute("app_RANDOM", app_RANDOM);
             model.addAttribute("app_BASE_URL", app_BASE_URL);
 
-            //return view name
+            //show homepage
             return new ModelAndView("homepage");
         } else {
 
