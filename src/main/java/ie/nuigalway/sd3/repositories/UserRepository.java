@@ -5,9 +5,9 @@ import ie.nuigalway.sd3.entities.User;
 
 public interface UserRepository {
 
-    User getUser( Long id );
+    User getUser(Long id);
 
-    User getUserByEmailAndPasshash( String email, String passhash );
+    User getUserByEmailAndPasshash(String email, String passhash);
 
-    void updateDtUpdated( Long id );
+    void updateDtUpdated(Long id);
 }

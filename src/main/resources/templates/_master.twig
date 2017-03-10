@@ -3,39 +3,38 @@
 <head>
     {% block head %}
 
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link rel="shortcut icon" type="image/ico" href="/static/favicon.ico">
+        <link rel="shortcut icon" type="image/ico" href="/static/favicon.ico">
 
-    <title>{% block title %}{% endblock %}</title>
+        <title>{% block title %}{% endblock %}</title>
 
-    <!-- Bootstrap core CSS -->
-    <link href="/webjars/bootstrap/3.3.7-1/css/bootstrap.min.css" rel="stylesheet">
-    <link href="/webjars/bootstrap/3.3.7-1/css/bootstrap-theme.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Indie+Flower|Roboto" rel="stylesheet">
+        <!-- Bootstrap core CSS -->
+        <link href="/webjars/bootstrap/3.3.7-1/css/bootstrap.min.css" rel="stylesheet">
+        <link href="/webjars/bootstrap/3.3.7-1/css/bootstrap-theme.min.css" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Indie+Flower|Roboto" rel="stylesheet">
 
-    <!-- css for this app -->
-    <link href="/static/css/main.css?random={{ app_RANDOM }}" rel="stylesheet">
+        <!-- css for this app -->
+        <link href="/static/css/main.css?random={{ app_RANDOM }}" rel="stylesheet">
 
-    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-    <script src="/webjars/html5shiv/3.7.3/html5shiv.min.js"></script>
-    <script src="/webjars/respond/1.4.2/dest/respond.min.js"></script>
-    <![endif]-->
+        <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+        <script src="/webjars/html5shiv/3.7.3/html5shiv.min.js"></script>
+        <script src="/webjars/respond/1.4.2/dest/respond.min.js"></script>
+        <![endif]-->
 
-    {% block extra_css %}
+        {% block extra_css %}
 
+        {% endblock %}
     {% endblock %}
-{% endblock %}
 </head>
 
 <body>
 {% block body %}
 
     <div class="container-fluid">
-
 
 
         <div class="header clearfix">
@@ -46,7 +45,8 @@
                     {% if user_id > 0 %}
 
                         {# this block is shown to signed in user #}
-                        <li role="presentation"><a href="{{ app_BASE_URL }}support" style="color: darkorange;">Welcome back {{ user_email }}</a></li>
+                        <li role="presentation"><a href="{{ app_BASE_URL }}support" style="color: darkorange;">Welcome
+                                back {{ user_email }}</a></li>
                         <li role="presentation"><a href="{{ app_BASE_URL }}logout" id="contact-support">Logout</a></li>
                         {# this block is shown to signed in user #}
 
@@ -56,7 +56,8 @@
                         <li role="presentation"><a href="{{ app_BASE_URL }}" class="active">Home</a></li>
                         <li role="presentation"><a href="{{ app_BASE_URL }}">About</a></li>
                         <li role="presentation"><a href="{{ app_BASE_URL }}">Menu option 3</a></li>
-                        <li role="presentation"><a href="{{ app_BASE_URL }}login" id="contact-support">Customer Login</a></li>
+                        <li role="presentation"><a href="{{ app_BASE_URL }}login" id="contact-support">Customer
+                                Login</a></li>
                         {# user not registered #}
 
                     {% endif %}

@@ -2,11 +2,11 @@
 {# using master template #}
 
 
-{% block title %}Login{%endblock%}
+{% block title %}Login{% endblock %}
 
 
 {% block content %}
-    <br /><br />
+    <br/><br/>
 
     <div class="row" id="centeredContainer">
 
@@ -20,12 +20,12 @@
 
                     <div class="form-group">
                         <label for="emailFld">Email:</label>
-                        <input type="email" class="form-control" id="emailFld" placeholder="Customer email" />
+                        <input type="email" class="form-control" id="emailFld" placeholder="Customer email"/>
                     </div>
 
                     <div class="form-group">
                         <label for="passwordFld">Password</label>
-                        <input type="password" class="form-control" id="passwordFld" />
+                        <input type="password" class="form-control" id="passwordFld"/>
                     </div>
 
                     <button type="submit" class="btn btn-lg btn-primary btn-block">continue</button>
@@ -42,52 +42,52 @@
 
 {% block extra_js %}
     <script type="text/javascript">
-		$(document).ready(function () {
+        $(document).ready(function () {
 
 
-			var _chatUrl    = '{{ app_BASE_URL }}support';
-			var _currentUrl = '{{ app_BASE_URL }}login';
-			var _loginUrl   = '{{ app_BASE_URL }}login/submit';
+            var _chatUrl = '{{ app_BASE_URL }}support';
+            var _currentUrl = '{{ app_BASE_URL }}login';
+            var _loginUrl = '{{ app_BASE_URL }}login/submit';
 
 
-			$("#contactForm").submit(function (event) {
+            $("#contactForm").submit(function (event) {
 
-				event.preventDefault();
+                event.preventDefault();
 
-				var password = $('#passwordFld').val();
-				var email    = $('#emailFld').val();
+                var password = $('#passwordFld').val();
+                var email = $('#emailFld').val();
 
-				//clear container
-				$('#chatPanelBody').empty().append('signing in...');
+                //clear container
+                $('#chatPanelBody').empty().append('signing in...');
 
-				//send ajax request
-				$.ajax({
-					type: "POST",
-					dataType: "json",
-					url: _loginUrl,
-					data: {
-						"email": email,
-						"pass": password
-					},
-					success: function (data, textStatus, xhr) {
+                //send ajax request
+                $.ajax({
+                    type: "POST",
+                    dataType: "json",
+                    url: _loginUrl,
+                    data: {
+                        "email": email,
+                        "pass": password
+                    },
+                    success: function (data, textStatus, xhr) {
 
-						if (data.status == 'ok') {
+                        if (data.status == 'ok') {
 
-							$('#chatPanelBody').empty().append("You have successfully signed in, redirecting..." );
-							window.location = _chatUrl;
-						}
-						else {
+                            $('#chatPanelBody').empty().append("You have successfully signed in, redirecting...");
+                            window.location = _chatUrl;
+                        }
+                        else {
 
-							$('#chatPanelBody').empty().append("ERROR: " + data.message );
-							window.location = _currentUrl;
-						}
-					},
-					error: function (xhr, textStatus, errorThrown) {
+                            $('#chatPanelBody').empty().append("ERROR: " + data.message);
+                            window.location = _currentUrl;
+                        }
+                    },
+                    error: function (xhr, textStatus, errorThrown) {
 
-						window.location = _currentUrl;
-					}
-				});
-			});
-		});
+                        window.location = _currentUrl;
+                    }
+                });
+            });
+        });
     </script>
 {% endblock %}

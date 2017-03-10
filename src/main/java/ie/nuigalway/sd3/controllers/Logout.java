@@ -13,35 +13,35 @@ import javax.servlet.http.HttpSession;
 @Controller
 public class Logout {
 
-	//from .properties
-	@Value( "${app.RANDOM}" )
-	String app_RANDOM;
-	@Value( "${app.BASE_URL}" )
-	String app_BASE_URL;
+    //from .properties
+    @Value("${app.RANDOM}")
+    String app_RANDOM;
+    @Value("${app.BASE_URL}")
+    String app_BASE_URL;
 
 
-	//shows login page
-	@RequestMapping(
-		value = "/logout",
-		produces = MediaType.TEXT_HTML_VALUE
-	)
-	public ModelAndView action(
-		ModelMap model,
-		HttpSession session
-	                          ) {
+    //shows login page
+    @RequestMapping(
+            value = "/logout",
+            produces = MediaType.TEXT_HTML_VALUE
+    )
+    public ModelAndView action(
+            ModelMap model,
+            HttpSession session
+    ) {
 
-		//remove the current user from session
-		session.setAttribute( "currentUser", null );
-
-
-		session.invalidate();
+        //remove the current user from session
+        session.setAttribute("currentUser", null);
 
 
-		//pass data to twig view
-		model.addAttribute( "app_RANDOM", app_RANDOM );
-		model.addAttribute( "app_BASE_URL", app_BASE_URL );
+        session.invalidate();
 
-		//return view name
-		return new ModelAndView( "logout" );
-	}
+
+        //pass data to twig view
+        model.addAttribute("app_RANDOM", app_RANDOM);
+        model.addAttribute("app_BASE_URL", app_BASE_URL);
+
+        //return view name
+        return new ModelAndView("logout");
+    }
 }

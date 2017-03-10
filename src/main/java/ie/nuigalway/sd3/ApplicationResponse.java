@@ -1,15 +1,15 @@
-package ie.nuigalway.sd3.entities;
+package ie.nuigalway.sd3;
 
 import java.util.HashMap;
 
-public class JsonResponse {
+public class ApplicationResponse {
 
     private String status = "error";
     private String message = "";
     private HashMap<String, String> payload = new HashMap<>();
 
 
-    public JsonResponse(
+    public ApplicationResponse(
             String status,
             String message
     ) {
@@ -22,7 +22,7 @@ public class JsonResponse {
         return status;
     }
 
-    public JsonResponse noPayload() {
+    public ApplicationResponse noPayload() {
 
         this.payload = null;
 
@@ -46,10 +46,6 @@ public class JsonResponse {
 
     public void setMessage(String message) {
         this.message = message;
-    }
-
-    public HashMap<String, String> getPayload() {
-        return payload;
     }
 
     public void setPayload(HashMap<String, String> payload) {

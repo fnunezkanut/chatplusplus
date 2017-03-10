@@ -17,14 +17,14 @@ public class MessageService {
     //a repository is chosen depending on which profile is run (dev or prod)
 
     //adding new message to a thread
-    public Long addMessageToThread( Long threadId, Long userId, String comment ){
+    public Long addMessageToThread(Long threadId, Long userId, String comment) {
 
-        return messageRepository.addMessageToThread( threadId, userId, comment );
+        return messageRepository.addMessageToThread(threadId, userId, comment);
     }
 
     //fetching all messages belonging to a thread
-    public List<Map<String,Object>> getMessagesByThreadId( Long threadId ){
+    public List<Map<String, Object>> getMessagesByThreadId(Long threadId) {
 
-        return messageRepository.getMessagesByThreadId( threadId );
+        return messageRepository.getMessagesByThreadId(threadId);
     }
 }

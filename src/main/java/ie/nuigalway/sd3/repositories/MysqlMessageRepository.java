@@ -23,100 +23,98 @@ import java.util.Map;
 
 
 @Repository
-@Profile( { "default", "test", "prod" } )
+@Profile({"default", "test", "prod"})
 @Transactional
 public class MysqlMessageRepository implements MessageRepository {
 
-	//our jdbc tempate
-	private JdbcTemplate jdbcTemplate;
+    //our jdbc tempate
+    private JdbcTemplate jdbcTemplate;
 
-	@Autowired
-	public MysqlMessageRepository( DataSource dataSource ) {
+    @Autowired
+    public MysqlMessageRepository(DataSource dataSource) {
 
-		jdbcTemplate = new JdbcTemplate( dataSource );
-	}
-
-
-	//mapping sql result rows to Message objects
-	private RowMapper<Message> messageMapperLambda = ( rs, rowNum ) -> {
-
-		Message message = new Message();
-		message.setId( rs.getLong( "id" ) );
-		message.setThread_id( rs.getLong( "thread_id" ) );
-		message.setUser_id( rs.getLong( "user_id" ) );
-		message.setComment( rs.getString( "comment" ) );
-		message.setDt_created( rs.getDate( "dt_created" ) );
-
-		return message;
-	};
+        jdbcTemplate = new JdbcTemplate(dataSource);
+    }
 
 
-	//fetch messages by thread_id
-	@Override
-	public List<Map<String, Object>> getMessagesByThreadId( Long threadId ) {
+    //mapping sql result rows to Message objects
+    private RowMapper<Message> messageMapperLambda = (rs, rowNum) -> {
 
-		String sqlTxt =
-			"SELECT messages.*, users.name, users.is_support FROM messages LEFT OUTER JOIN users ON users.id = messages.user_id WHERE thread_id = ? ORDER BY messages.id DESC";
-		List<Map<String, Object>> messages;
+        Message message = new Message();
+        message.setId(rs.getLong("id"));
+        message.setThread_id(rs.getLong("thread_id"));
+        message.setUser_id(rs.getLong("user_id"));
+        message.setComment(rs.getString("comment"));
+        message.setDt_created(rs.getDate("dt_created"));
 
-		//try to fetch all messages
-		try {
-
-			messages = jdbcTemplate.queryForList( sqlTxt, threadId );
-		}
-		catch (InvalidResultSetAccessException e) {
-			throw new RuntimeException( e );
-		}
-		catch (DataAccessException e) {
-			throw new RuntimeException( e );
-		}
+        return message;
+    };
 
 
-		return messages;
-	}
+    //fetch messages by thread_id
+    @Override
+    public List<Map<String, Object>> getMessagesByThreadId(Long threadId) {
+
+        String sqlTxt =
+                "SELECT messages.*, users.name, users.is_support FROM messages LEFT OUTER JOIN users ON users.id = messages.user_id WHERE thread_id = ? ORDER BY messages.id DESC";
 
 
-	//create a new message and return autoincremented unique id
-	@Override
-	public Long addMessageToThread( Long threadId, Long userId, String comment ) {
+        List<Map<String, Object>> messages;
 
-		KeyHolder keyHolder = new GeneratedKeyHolder();
-		String    sqlTxt    = "INSERT INTO messages(thread_id,user_id,comment,dt_created) VALUES(?,?,?,?)";
+        //try to fetch all messages
+        try {
+
+            messages = jdbcTemplate.queryForList(sqlTxt, threadId);
+        } catch (InvalidResultSetAccessException e) {
+            throw new RuntimeException(e);
+        } catch (DataAccessException e) {
+            throw new RuntimeException(e);
+        }
 
 
-		//current time used at insert time
-		java.util.Date dt         = new java.util.Date();
-		DateFormat     dateFormat = new SimpleDateFormat( "yyyy/MM/dd HH:mm:ss" );
+        return messages;
+    }
 
 
-		//try to insert entry to mysql
-		try {
+    //create a new message and return autoincremented unique id
+    @Override
+    public Long addMessageToThread(Long threadId, Long userId, String comment) {
 
-			jdbcTemplate.update(
-				( Connection connection ) -> {
-					PreparedStatement ps = connection.prepareStatement( sqlTxt, Statement.RETURN_GENERATED_KEYS );
-					ps.setString( 1, Long.toString( threadId ) );
-					ps.setString( 2, Long.toString( userId ) );
-					ps.setString( 3, comment );
-					ps.setString( 4, dateFormat.format( dt ) );
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        String sqlTxt = "INSERT INTO messages(thread_id,user_id,comment,dt_created) VALUES(?,?,?,?)";
 
-					return ps;
-				},
-				keyHolder
-			                   );
-		}
-		catch (InvalidResultSetAccessException e) {
 
-			throw new RuntimeException( e );
-		}
-		catch (DataAccessException e) {
+        //current time used at insert time
+        java.util.Date dt = new java.util.Date();
+        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 
-			throw new RuntimeException( e );
-		}
 
-		//get the autoincrement id from the insert statement
-		Long insertId = keyHolder.getKey().longValue();
+        //try to insert entry to mysql
+        try {
 
-		return insertId;
-	}
+            jdbcTemplate.update(
+                    (Connection connection) -> {
+                        PreparedStatement ps = connection.prepareStatement(sqlTxt, Statement.RETURN_GENERATED_KEYS);
+                        ps.setString(1, Long.toString(threadId));
+                        ps.setString(2, Long.toString(userId));
+                        ps.setString(3, comment);
+                        ps.setString(4, dateFormat.format(dt));
+
+                        return ps;
+                    },
+                    keyHolder
+            );
+        } catch (InvalidResultSetAccessException e) {
+
+            throw new RuntimeException(e);
+        } catch (DataAccessException e) {
+
+            throw new RuntimeException(e);
+        }
+
+        //get the autoincrement id from the insert statement
+        Long insertId = keyHolder.getKey().longValue();
+
+        return insertId;
+    }
 }

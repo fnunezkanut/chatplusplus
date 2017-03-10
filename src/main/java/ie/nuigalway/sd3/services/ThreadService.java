@@ -16,23 +16,31 @@ public class ThreadService {
     private ThreadRepository threadRepository;
     //a repository is chosen depending on which profile is run (dev or prod)
 
-    public List<Thread> getThreads(){
+
+    //gets a single thread
+    public Thread getThread(Long threadId) {
+
+        return threadRepository.getThread(threadId);
+    }
+
+
+    //gets all threads
+    public List<Thread> getThreads() {
 
         return threadRepository.getThreads();
     }
 
-    public Thread getThread(Long threadId){
 
-        return threadRepository.getThread( threadId );
+    //gets all threads belonging to a particular customer
+    public List<Thread> getThreadsByCustomerId(Long customerId) {
+
+        return threadRepository.getThreadsByCustomerId(customerId);
     }
 
-    public Long createThread( String title, long customerId ){
 
-        return threadRepository.createThread( title, customerId );
-    }
+    //create a thread
+    public Long createThread(String title, Long customerId) {
 
-    public void updateDtUpdated( Long threadId ){
-
-        threadRepository.updateDtUpdated( threadId );
+        return threadRepository.createThread(title, customerId);
     }
 }

@@ -7,7 +7,7 @@
 
 {% block content %}
 
-	<br />
+    <br/>
 
     <div class="row" id="centeredContainer">
 
@@ -29,41 +29,41 @@
 
 {% block extra_js %}
     <script type="text/javascript">
-		$(document).ready(function () {
+        $(document).ready(function () {
 
 
-			var _currentUrl      = '{{ app_BASE_URL }}support';
-			var _fetchThreadsUrl = '{{ app_BASE_URL }}api/v1/threads';
+            var _currentUrl = '{{ app_BASE_URL }}support';
+            var _fetchThreadsUrl = '{{ app_BASE_URL }}api/v1/threads';
 
-			//send ajax request to fetch a list of all the threads
-			$.ajax({
-				type: "GET",
-				dataType: "json",
-				url: _fetchThreadsUrl,
-				success: function (data, textStatus, xhr) {
+            //send ajax request to fetch a list of all the threads
+            $.ajax({
+                type: "GET",
+                dataType: "json",
+                url: _fetchThreadsUrl,
+                success: function (data, textStatus, xhr) {
 
 
-					//construct a list of issues
-					var html = '<div class="list-group">';
+                    //construct a list of issues
+                    var html = '<div class="list-group">';
 
-					//iterate over incoming JSON with thread lists
-					$.each( data, function( index, value ) {
+                    //iterate over incoming JSON with thread lists
+                    $.each(data, function (index, value) {
 
-						html 	+= 	'<a href="{{ app_BASE_URL }}chat?threadId=' + value.id + '" class="list-group-item">'
-								+ 	value.title + ' <span class="badge">' + value.dt_created + '</span></a>';
-					});
+                        html += '<a href="{{ app_BASE_URL }}chat?threadId=' + value.id + '" class="list-group-item">'
+                            + value.title + ' <span class="badge">' + value.dt_created + '</span></a>';
+                    });
 
-					html += '</div>';
+                    html += '</div>';
 
-					//add constructed html list into the chat panel
-					$('#chatPanelBody').empty().append( html );
-				},
-				error: function (xhr, textStatus, errorThrown) {
+                    //add constructed html list into the chat panel
+                    $('#chatPanelBody').empty().append(html);
+                },
+                error: function (xhr, textStatus, errorThrown) {
 
-					$('#chatPanelBody').empty().append('unable to fetch complete list of issues');
-				}
-			});
+                    $('#chatPanelBody').empty().append('unable to fetch complete list of issues');
+                }
+            });
 
-		});
+        });
     </script>
 {% endblock %}

@@ -6,11 +6,13 @@ import java.util.List;
 
 public interface ThreadRepository {
 
-    List<Thread> getThreads();
-
     Thread getThread(Long id);
 
-    Long createThread(String title, Long customerId );
+    List<Thread> getThreads();
+
+    List<Thread> getThreadsByCustomerId(Long customerId);
+
+    Long createThread(String title, Long customerId);
 
     void updateDtUpdated(Long id);
 }

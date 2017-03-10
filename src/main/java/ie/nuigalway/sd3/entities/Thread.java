@@ -8,7 +8,7 @@ public class Thread {
     private String title;
     private Date dt_created;
     private Date dt_updated;
-    private Long customer_id   =   0L;
+    private Long customer_id = 0L;
 
 
     //constructors
@@ -67,7 +67,7 @@ public class Thread {
         return customer_id;
     }
 
-    public void setCustomerId( Long customer_id ) {
+    public void setCustomerId(Long customer_id) {
         this.customer_id = customer_id;
     }
     //getters and setters

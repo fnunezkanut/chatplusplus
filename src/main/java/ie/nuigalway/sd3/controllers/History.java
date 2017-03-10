@@ -10,7 +10,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpSession;
 
 @Controller
-public class Support {
+public class History {
 
     //from .properties
     @Value("${app.RANDOM}")
@@ -19,7 +19,7 @@ public class Support {
     String app_BASE_URL;
 
 
-    @RequestMapping("/support")
+    @RequestMapping("/history")
     public ModelAndView action(
             ModelMap model,
             HttpSession session
@@ -43,14 +43,8 @@ public class Support {
             model.addAttribute("user_is_support", currentUser.getIsSupport());
 
 
-            //the view shown depends on whether the user is support person or a normal customer
-            String viewName = "support/customer";
-            if (currentUser.getIsSupport() == true) {
-                viewName = "support/support";
-            }
-
             //return view name
-            return new ModelAndView(viewName);
+            return new ModelAndView("history");
         }
     }
 }

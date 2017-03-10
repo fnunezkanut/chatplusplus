@@ -2,12 +2,12 @@
 {# using master template #}
 
 
-{% block title %}Customer Chat : {{ thread_title }} {%endblock%}
+{% block title %}Customer Chat : {{ thread_title }} {% endblock %}
 
 
 {% block content %}
 
-    <br />
+    <br/>
 
     <div class="row" id="centeredContainer">
 
@@ -17,18 +17,19 @@
             </div>
             <div class="panel-body" style="text-align: left;" id="chatPanelBody">
 
-				<form class="form-inline" role="form" id="chatFrm" onsubmit="return false">
+                <form class="form-inline" role="form" id="chatFrm" onsubmit="return false">
 
-					<div class="col-md-10">
-						<input type="text" class="form-control" id="chatText" name="chatText" style="width: 99%;"  autocomplete="off" />
-					</div>
-					<div class="col-md-2">
-						<button id="submitBtn" class="btn btn-primary" type="button">submit</button>
-					</div>
+                    <div class="col-md-10">
+                        <input type="text" class="form-control" id="chatText" name="chatText" style="width: 99%;"
+                               autocomplete="off"/>
+                    </div>
+                    <div class="col-md-2">
+                        <button id="submitBtn" class="btn btn-primary" type="button">submit</button>
+                    </div>
 
-				</form>
+                </form>
 
-				<hr />
+                <hr/>
 
                 <div id="messagesFld">
 
@@ -45,122 +46,119 @@
 
 {% block extra_js %}
 
-	<!-- we need sockjs and stomp libraries -->
-<script src="/webjars/sockjs-client/1.1.2/sockjs.min.js"></script>
-<script src="/webjars/stomp-websocket/2.3.3/stomp.min.js"></script>
-<script src="/webjars/momentjs/2.17.1/min/moment.min.js"></script>
-<script type="application/javascript">
+    <!-- we need sockjs and stomp libraries -->
+    <script src="/webjars/sockjs-client/1.1.2/sockjs.min.js"></script>
+    <script src="/webjars/stomp-websocket/2.3.3/stomp.min.js"></script>
+    <script src="/webjars/momentjs/2.17.1/min/moment.min.js"></script>
+    <script type="application/javascript">
 
 
-	var stompClient 	= 	null;
+        var stompClient = null;
 
 
-	//conects to our websocket
-	function connect() {
+        //conects to our websocket
+        function connect() {
 
-		var socket 	= 	new SockJS("/stomp");
-		stompClient = Stomp.over(socket);
-		stompClient.connect({}, function (frame) {
+            var socket = new SockJS("/stomp");
+            stompClient = Stomp.over(socket);
+            stompClient.connect({}, function (frame) {
 
-			//once we connect submit a request to get list of messages)
-			stompClient.send(
-				"/thread/{{ thread_id }}",
-				{},
-				JSON.stringify(
-					{
-						'message'	: "",
-						'user_id'	: {{ user_id }}
-					}
-				)
-			);
+                //once we connect submit a request to get list of messages)
+                stompClient.send(
+                    "/thread/{{ thread_id }}",
+                    {},
+                    JSON.stringify(
+                        {
+                            'message': "",
+                            'user_id': {{ user_id }}
+                        }
+                    )
+                );
 
-			stompClient.subscribe('/topic/chat', function ( serverMessage ) {
+                stompClient.subscribe('/topic/chat', function (serverMessage) {
 
-				//parse message coming from server
-				var decodedMessage = jQuery.parseJSON( serverMessage.body );
-				if (decodedMessage.status == "ok"){
+                    //parse message coming from server
+                    var decodedMessage = jQuery.parseJSON(serverMessage.body);
+                    if (decodedMessage.status == "ok") {
 
-					renderMessages( decodedMessage.payload.messages );
-				}
-			});
-		});
-	}
-
-
+                        renderMessages(decodedMessage.payload.messages);
+                    }
+                });
+            });
+        }
 
 
-	//triggered when we want to send a message via websocket
-	function submitChat(){
+        //triggered when we want to send a message via websocket
+        function submitChat() {
 
-		var chatText = $("#chatText").val();
+            var chatText = $("#chatText").val();
 
-		//clear chat field
-		$("#chatText").val("");
+            //clear chat field
+            $("#chatText").val("");
 
-		//send a message down the websocket
-		stompClient.send(
-			"/thread/{{ thread_id }}",
-			{},
-			JSON.stringify(
-				{
-					'message'	: chatText,
-					'user_id'	: {{ user_id }}
-				}
-			)
-		);
-	}
-
-
-	function renderMessages( _messages ){
-
-		var messages = jQuery.parseJSON( _messages );
-
-		var html = '<table class="table table-condensed table-striped">';
-		$.each( messages, function( index, value ) {
-
-			//var dt = new Date( value.dt_created );
-			var formatted = moment( value.dt_created ).format('MM/DD/YYYY hh:mm a')
-
-			//color in support replies in a different color
-			if( value.is_support == true ){
-
-				html 	+= 	'<tr class="warning">';
-			}
-			else{
-
-				html 	+= 	'<tr>';
-			}
-
-			html 	+= 	'<td class="messageTblComment">' + value.comment + '</td>';
-			html 	+= 	'<td class="messageTblName"><strong>' + value.name + '</strong><br />' + formatted + '</td>';
-			html 	+= 	'</tr>';
-		});
-		html 	+= 	'</table>';
-
-		$('#messagesFld').empty().append( html );
-	}
+            //send a message down the websocket
+            stompClient.send(
+                "/thread/{{ thread_id }}",
+                {},
+                JSON.stringify(
+                    {
+                        'message': chatText,
+                        'user_id': {{ user_id }}
+                    }
+                )
+            );
+        }
 
 
+        function renderMessages(_messages) {
 
-	//once the page completes loading
-	$(document).ready(function () {
+            var messages = jQuery.parseJSON(_messages);
 
-		//connect to websocket when page loads
-		connect();
+            var html = '<table class="table table-condensed table-striped">';
+            $.each(messages, function (index, value) {
 
-		$('#chatText').focus();
+                //var dt = new Date( value.dt_created );
+                var formatted = moment(value.dt_created).format('MM/DD/YYYY hh:mm a')
 
-		//when either enter is pressed or submit button is clicked we send the chat text
-		$('#chatFrm').keypress(function(e){
+                //color in support replies in a different color
+                if (value.is_support == true) {
 
-			var keycode = (e.keyCode ? e.keyCode : e.which);
-			if(keycode == '13'){
-				submitChat();
-			}
-		});
-		$('#submitBtn').on("click", submitChat );
-	});
+                    html += '<tr class="warning">';
+                }
+                else {
 
-</script>
+                    html += '<tr>';
+                }
+
+                html += '<td class="messageTblComment">' + value.comment + '</td>';
+                html += '<td class="messageTblName"><strong>' + value.name + '</strong><br />' + formatted + '</td>';
+                html += '</tr>';
+            });
+            html += '</table>';
+
+            $('#messagesFld').empty().append(html);
+        }
+
+
+        //once the page completes loading
+        $(document).ready(function () {
+
+            //connect to websocket when page loads
+            connect();
+
+            $('#chatText').focus();
+
+            //when either enter is pressed or submit button is clicked we send the chat text
+            $('#chatFrm').keypress(function (e) {
+
+                var keycode = (e.keyCode ? e.keyCode : e.which);
+                if (keycode == '13') {
+                    submitChat();
+                }
+            });
+            $('#submitBtn').on("click", submitChat);
+        });
+
+    </script>
 
 {% endblock %}

@@ -23,7 +23,7 @@ public class User implements Serializable {
         return id;
     }
 
-    public void setId( Long id ) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -31,7 +31,7 @@ public class User implements Serializable {
         return name;
     }
 
-    public void setName( String name ) {
+    public void setName(String name) {
         this.name = name;
     }
 
@@ -39,7 +39,7 @@ public class User implements Serializable {
         return email;
     }
 
-    public void setEmail( String email ) {
+    public void setEmail(String email) {
         this.email = email;
     }
 
@@ -47,7 +47,7 @@ public class User implements Serializable {
         return dt_created;
     }
 
-    public void setDt_created( Date dt_created ) {
+    public void setDt_created(Date dt_created) {
         this.dt_created = dt_created;
     }
 
@@ -55,7 +55,7 @@ public class User implements Serializable {
         return pass;
     }
 
-    public void setPass( String pass ) {
+    public void setPass(String pass) {
         this.pass = pass;
     }
 
@@ -63,7 +63,7 @@ public class User implements Serializable {
         return is_support;
     }
 
-    public void setIsSupport( boolean is_support ) {
+    public void setIsSupport(boolean is_support) {
         this.is_support = is_support;
     }
     //getters and setters
@@ -72,7 +72,7 @@ public class User implements Serializable {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof User )) return false;
+        if (!(o instanceof User)) return false;
 
         User thread = (User) o;
 

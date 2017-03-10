@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.ServletRequestAttributes;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
@@ -18,69 +17,69 @@ import java.util.Map;
 public class Error implements ErrorController {
 
 
-	private ErrorAttributes errorAttributes;
-	private final static String ERROR_PATH = "/error";
-	public Error( ErrorAttributes errorAttributes) {
-		this.errorAttributes = errorAttributes;
-	}
+    private ErrorAttributes errorAttributes;
+    private final static String ERROR_PATH = "/error";
+
+    public Error(ErrorAttributes errorAttributes) {
+        this.errorAttributes = errorAttributes;
+    }
 
 
-	//html error view
-	@RequestMapping(value = ERROR_PATH, produces = "text/html")
-	public String errorHtml( HttpServletRequest request ) {
-		Map<String, Object> body = getErrorAttributes(request, getTraceParameter(request));
-		HttpStatus status = getStatus(request);
-		return "_error";
-	}
+    //html error view
+    @RequestMapping(value = ERROR_PATH, produces = "text/html")
+    public String errorHtml(HttpServletRequest request) {
+        Map<String, Object> body = getErrorAttributes(request, getTraceParameter(request));
+        HttpStatus status = getStatus(request);
+        return "_error";
+    }
 
-	/**
-	 * Supports other formats like JSON, XML
-	 * @param request
-	 * @return
-	 */
-	@RequestMapping(value = ERROR_PATH)
-	@ResponseBody
-	public ResponseEntity<Map<String, Object>> error( HttpServletRequest request) {
-		Map<String, Object> body = getErrorAttributes(request, getTraceParameter(request));
-		HttpStatus status = getStatus(request);
-		return new ResponseEntity<Map<String, Object>>(body, status);
-	}
-
-
-
-	@Override
-	public String getErrorPath() {
-		return ERROR_PATH;
-	}
+    /**
+     * Supports other formats like JSON, XML
+     *
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = ERROR_PATH)
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> error(HttpServletRequest request) {
+        Map<String, Object> body = getErrorAttributes(request, getTraceParameter(request));
+        HttpStatus status = getStatus(request);
+        return new ResponseEntity<Map<String, Object>>(body, status);
+    }
 
 
-	private boolean getTraceParameter(HttpServletRequest request) {
-		String parameter = request.getParameter("trace");
-		if (parameter == null) {
-			return false;
-		}
-		return !"false".equals(parameter.toLowerCase());
-	}
+    @Override
+    public String getErrorPath() {
+        return ERROR_PATH;
+    }
 
-	private Map<String, Object> getErrorAttributes(HttpServletRequest request,
-	                                               boolean includeStackTrace) {
-		RequestAttributes requestAttributes = new ServletRequestAttributes(request);
-		return this.errorAttributes.getErrorAttributes(requestAttributes,
-				includeStackTrace);
-	}
 
-	private HttpStatus getStatus(HttpServletRequest request) {
-		Integer statusCode = (Integer) request.getAttribute("javax.servlet.error.status_code");
-		if (statusCode != null) {
+    private boolean getTraceParameter(HttpServletRequest request) {
+        String parameter = request.getParameter("trace");
+        if (parameter == null) {
+            return false;
+        }
+        return !"false".equals(parameter.toLowerCase());
+    }
 
-			try {
+    private Map<String, Object> getErrorAttributes(HttpServletRequest request,
+                                                   boolean includeStackTrace) {
+        RequestAttributes requestAttributes = new ServletRequestAttributes(request);
+        return this.errorAttributes.getErrorAttributes(requestAttributes,
+                includeStackTrace);
+    }
 
-				return HttpStatus.valueOf(statusCode);
-			}
-			catch (Exception ex) {
+    private HttpStatus getStatus(HttpServletRequest request) {
+        Integer statusCode = (Integer) request.getAttribute("javax.servlet.error.status_code");
+        if (statusCode != null) {
 
-			}
-		}
-		return HttpStatus.INTERNAL_SERVER_ERROR;
-	}
+            try {
+
+                return HttpStatus.valueOf(statusCode);
+            } catch (Exception ex) {
+
+            }
+        }
+        return HttpStatus.INTERNAL_SERVER_ERROR;
+    }
 }

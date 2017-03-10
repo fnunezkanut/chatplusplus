@@ -15,19 +15,19 @@ public class UserService {
     //a repository is chosen depending on which profile is run (dev or prod)
 
 
-    public User getUser(Long userId){
+    public User getUser(Long userId) {
 
-        return userRepository.getUser( userId );
+        return userRepository.getUser(userId);
     }
 
-    public User getUserByEmailAndPasshash(String email, String passhash){
+    public User getUserByEmailAndPasshash(String email, String passhash) {
 
-        return userRepository.getUserByEmailAndPasshash( email, passhash );
+        return userRepository.getUserByEmailAndPasshash(email, passhash);
     }
 
 
-    public void updateDtUpdated( Long userId ){
+    public void updateDtUpdated(Long userId) {
 
-        userRepository.updateDtUpdated( userId );
+        userRepository.updateDtUpdated(userId);
     }
 }

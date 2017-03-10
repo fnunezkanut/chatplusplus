@@ -14,87 +14,82 @@ import javax.sql.DataSource;
 
 
 @Repository
-@Profile({"default","test","prod"})
+@Profile({"default", "test", "prod"})
 @Transactional
-public class MysqlUserRepository implements UserRepository{
+public class MysqlUserRepository implements UserRepository {
 
-	//our jdbc tempate
-	private JdbcTemplate jdbcTemplate;
+    //our jdbc tempate
+    private JdbcTemplate jdbcTemplate;
 
-	@Autowired
-	public MysqlUserRepository( DataSource dataSource ){
+    @Autowired
+    public MysqlUserRepository(DataSource dataSource) {
 
-		jdbcTemplate = new JdbcTemplate( dataSource );
-	}
+        jdbcTemplate = new JdbcTemplate(dataSource);
+    }
 
 
-	//mapping sql result rows to User objects
-	private RowMapper<User> userMapperLambda = ( rs, rowNum ) -> {
-		User user = new User();
-		user.setId( rs.getLong("id") );
-		user.setName( rs.getString("name") );
-		user.setEmail( rs.getString("email") );
-		user.setPass( rs.getString("passhash") );
-		user.setDt_created( rs.getDate( "dt_created" ) );
+    //mapping sql result rows to User objects
+    private RowMapper<User> userMapperLambda = (rs, rowNum) -> {
+        User user = new User();
+        user.setId(rs.getLong("id"));
+        user.setName(rs.getString("name"));
+        user.setEmail(rs.getString("email"));
+        user.setPass(rs.getString("passhash"));
+        user.setDt_created(rs.getDate("dt_created"));
 
-		short isSupport = rs.getShort( "is_support" );
-		if( isSupport == 1 ){
-			user.setIsSupport( true );
-		}
-		else{
-			user.setIsSupport( false );
-		}
+        short isSupport = rs.getShort("is_support");
+        if (isSupport == 1) {
+            user.setIsSupport(true);
+        } else {
+            user.setIsSupport(false);
+        }
 
-		return user;
-	};
+        return user;
+    };
 
-	@Override
-	public User getUser( Long id ) {
+    @Override
+    public User getUser(Long id) {
 
-		User user;
-		String sqlTxt = "SELECT * FROM users WHERE id=?";
+        User user;
+        String sqlTxt = "SELECT * FROM users WHERE id=?";
 
-		//try to fetch a single entry from table
-		try{
+        //try to fetch a single entry from table
+        try {
 
-			user =  jdbcTemplate.queryForObject( sqlTxt, userMapperLambda, id );
-		}
-		catch (InvalidResultSetAccessException e) {
-			throw new RuntimeException(e);
-		}
-		catch (DataAccessException e) {
-			throw new RuntimeException(e);
-		}
+            user = jdbcTemplate.queryForObject(sqlTxt, userMapperLambda, id);
+        } catch (InvalidResultSetAccessException e) {
+            throw new RuntimeException(e);
+        } catch (DataAccessException e) {
+            throw new RuntimeException(e);
+        }
 
-		return user;
-	}
+        return user;
+    }
 
-	@Override
-	public User getUserByEmailAndPasshash( String email, String passhash ) {
+    @Override
+    public User getUserByEmailAndPasshash(String email, String passhash) {
 
-		User user;
-		String sqlTxt = "SELECT * FROM users WHERE email=? AND passhash=?";
+        User user;
+        String sqlTxt = "SELECT * FROM users WHERE email=? AND passhash=?";
 
-		//try to fetch a single entry user from table given email and passhash
-		try{
+        //try to fetch a single entry user from table given email and passhash
+        try {
 
-			user =  jdbcTemplate.queryForObject( sqlTxt, userMapperLambda, email, passhash );
-		}
-		catch (InvalidResultSetAccessException e) {
-			throw new RuntimeException(e);
-		}
-		catch (DataAccessException e) {
-			throw new RuntimeException(e);
-		}
+            user = jdbcTemplate.queryForObject(sqlTxt, userMapperLambda, email, passhash);
+        } catch (InvalidResultSetAccessException e) {
+            throw new RuntimeException(e);
+        } catch (DataAccessException e) {
+            throw new RuntimeException(e);
+        }
 
-		//TODO better exceptions
+        //TODO better exceptions
 
-		return user;
-	}
+        return user;
+    }
 
-	@Override
-	public void updateDtUpdated( Long id ) {
+    @Override
+    public void updateDtUpdated(Long id) {
 
-		//TODO update on login time
-	}
+        //TODO update on login time
+    }
 }

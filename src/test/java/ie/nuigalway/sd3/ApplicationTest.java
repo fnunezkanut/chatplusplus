@@ -16,26 +16,26 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-@ActiveProfiles( profiles={"default"} )
+@ActiveProfiles(profiles = {"default"})
 public class ApplicationTest {
 
-	private MockMvc mockMvc;
+    private MockMvc mockMvc;
 
-	@Before
-	public void setUp() throws Exception{
+    @Before
+    public void setUp() throws Exception {
 
-		//our hi controller test
-		mockMvc = MockMvcBuilders.standaloneSetup( new TestController() ).build();
-	}
+        //our hi controller test
+        mockMvc = MockMvcBuilders.standaloneSetup(new TestController()).build();
+    }
 
-	@Test
-	public void test() throws Exception{
+    @Test
+    public void test() throws Exception {
 
-		//we request a http://localhost:8080/test and check for a "test" message in response
-		mockMvc.perform(MockMvcRequestBuilders.get("/test").accept(MediaType.TEXT_PLAIN) )
-				.andExpect(MockMvcResultMatchers.status().isOk() )
-				.andExpect( MockMvcResultMatchers.content().string(
-						Matchers.equalTo("test")
-				));
-	}
+        //we request a http://localhost:8080/test and check for a "test" message in response
+        mockMvc.perform(MockMvcRequestBuilders.get("/test").accept(MediaType.TEXT_PLAIN))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.content().string(
+                        Matchers.equalTo("test")
+                ));
+    }
 }

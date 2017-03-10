@@ -2,12 +2,12 @@
 {# using master template #}
 
 
-{% block title %}Customer Support Center{%endblock%}
+{% block title %}Customer Support Center{% endblock %}
 
 
 {% block content %}
 
-	<br />
+    <br/>
 
     <div class="row" id="centeredContainer">
 
@@ -24,17 +24,20 @@
                     <li role="presentation"><a href="{{ app_BASE_URL }}/history">View past issues</a></li>
                 </ul>
 
-                <br /><hr /><br />
+                <br/>
+                <hr/>
+                <br/>
 
                 <form id="createForm">
 
                     <div class="form-group">
                         <label for="subjectFld">Subject:</label>
-                        <input type="text" class="form-control" id="subjectFld" placeholder="Short description of your issue" />
+                        <input type="text" class="form-control" id="subjectFld"
+                               placeholder="Short description of your issue"/>
                     </div>
 
-                    <br />
-                    <br />
+                    <br/>
+                    <br/>
 
                     <button type="submit" class="btn btn-lg btn-success btn-block">Chat to Support</button>
                 </form>
@@ -48,49 +51,49 @@
 
 {% block extra_js %}
     <script type="text/javascript">
-		$(document).ready(function () {
+        $(document).ready(function () {
 
-			var _currentUrl = '{{ app_BASE_URL }}support';
-			var _newThreadUrl   = '{{ app_BASE_URL }}api/v1/threads';
+            var _currentUrl = '{{ app_BASE_URL }}support';
+            var _newThreadUrl = '{{ app_BASE_URL }}api/v1/threads';
 
 
-			$("#createForm").submit(function (event) {
+            $("#createForm").submit(function (event) {
 
-				event.preventDefault();
+                event.preventDefault();
 
-				var title = $('#subjectFld').val();
+                var title = $('#subjectFld').val();
 
-				//clear container
-				$('#createPanelBody').empty().append('creating new issue...');
+                //clear container
+                $('#createPanelBody').empty().append('creating new issue...');
 
-				//send ajax request
-				$.ajax({
-					type: "POST",
-					dataType: "json",
-					url: _newThreadUrl,
-					data: {
-						"title": title
-					},
-					success: function (data, textStatus, xhr) {
+                //send ajax request
+                $.ajax({
+                    type: "POST",
+                    dataType: "json",
+                    url: _newThreadUrl,
+                    data: {
+                        "title": title
+                    },
+                    success: function (data, textStatus, xhr) {
 
-						if (data.status == 'ok') {
+                        if (data.status == 'ok') {
 
-							window.location = '{{ app_BASE_URL }}chat?threadId=' + data.payload.thread_id;
-						}
-						else {
+                            window.location = '{{ app_BASE_URL }}chat?threadId=' + data.payload.thread_id;
+                        }
+                        else {
 
-							alert("an error has occurred, try again");
-							window.location = _currentUrl;
-						}
-					},
-					error: function (xhr, textStatus, errorThrown) {
+                            alert("an error has occurred, try again");
+                            window.location = _currentUrl;
+                        }
+                    },
+                    error: function (xhr, textStatus, errorThrown) {
 
-						alert("an error has occurred, try again");
-						window.location = _currentUrl;
-					}
-				});
-			});
-		});
+                        alert("an error has occurred, try again");
+                        window.location = _currentUrl;
+                    }
+                });
+            });
+        });
     </script>
 {% endblock %}
 

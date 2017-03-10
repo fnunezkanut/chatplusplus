@@ -14,38 +14,37 @@ import javax.servlet.http.HttpSession;
 @Controller
 public class Login {
 
-	//from .properties
-	@Value( "${app.RANDOM}" )
-	String app_RANDOM;
-	@Value( "${app.BASE_URL}" )
-	String app_BASE_URL;
+    //from .properties
+    @Value("${app.RANDOM}")
+    String app_RANDOM;
+    @Value("${app.BASE_URL}")
+    String app_BASE_URL;
 
 
-	//shows login page
-	@RequestMapping(
-		value = "/login",
-		produces = MediaType.TEXT_HTML_VALUE
-	)
-	public ModelAndView action(
-		ModelMap model,
-		HttpSession session ){
+    //shows login page
+    @RequestMapping(
+            value = "/login",
+            produces = MediaType.TEXT_HTML_VALUE
+    )
+    public ModelAndView action(
+            ModelMap model,
+            HttpSession session) {
 
-		//get current user from session
-		User currentUser = (User) session.getAttribute( "currentUser" );
-		if ( currentUser == null ) {
+        //get current user from session
+        User currentUser = (User) session.getAttribute("currentUser");
+        if (currentUser == null) {
 
-			//pass data to twig view
-			model.addAttribute( "app_RANDOM", app_RANDOM );
-			model.addAttribute( "app_BASE_URL", app_BASE_URL );
+            //pass data to twig view
+            model.addAttribute("app_RANDOM", app_RANDOM);
+            model.addAttribute("app_BASE_URL", app_BASE_URL);
 
-			//return view name
-			return new ModelAndView( "login" );
-		}
-		else {
+            //return view name
+            return new ModelAndView("login");
+        } else {
 
 
-			//redirect if user is signed in to support page
-			return new ModelAndView( "redirect:" + app_BASE_URL + "support" );
-		}
-	}
+            //redirect if user is signed in to support page
+            return new ModelAndView("redirect:" + app_BASE_URL + "support");
+        }
+    }
 }
