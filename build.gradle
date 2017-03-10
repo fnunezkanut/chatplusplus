@@ -3,25 +3,26 @@ buildscript {
 		mavenCentral()
 	}
 	dependencies {
-		classpath('org.springframework.boot:spring-boot-gradle-plugin:1.5.2.RELEASE')
-		classpath('org.springframework:springloaded:1.2.6.RELEASE')
+		classpath("org.springframework.boot:spring-boot-gradle-plugin")
+		classpath("org.springframework:springloaded:1.2.6.RELEASE")
 	}
 }
 
-apply plugin: 'java'
-apply plugin: 'eclipse'
-apply plugin: 'org.springframework.boot'
 
+apply plugin: "java"
+apply plugin: "eclipse"
+apply plugin: "org.springframework.boot"
+apply plugin: "idea"
 
 //gets a formatted date
 def getDate() {
 	def date = new Date()
-	def formattedDate = date.format('yyyyMMddHHmmss')
+	def formattedDate = date.format("yyyyMMddHHmmss")
 	return formattedDate
 }
 
 jar {
-	baseName = 'chatplusplus'
+	baseName = "chatplusplus"
 	version = "v0.2-build-${getDate()}"
 }
 
@@ -37,38 +38,30 @@ repositories {
 
 dependencies {
 
-	compile(
-			'org.jtwig:jtwig-spring-boot-starter:5.+',
-			'org.jtwig:jtwig-hot-reloading-extension:5.+',
-			'org.jtwig:jtwig-spring-asset-extension:5.+',
-			'org.springframework.boot:spring-boot-starter-web',
-			'org.springframework.boot:spring-boot-starter-web-services',
-			'org.springframework.boot:spring-boot-starter-websocket',
-			'org.springframework.boot:spring-boot-devtools',
-			'org.springframework:spring-context:4.3.6.RELEASE',
-			'org.springframework:spring-jdbc:4.3.6.RELEASE',
-			'org.springframework.boot:spring-boot-starter-data-redis',
-			'org.springframework.session:spring-session:1.3.0.RELEASE',
-			'org.apache.commons:commons-dbcp2:2.1.1',
+    compile "org.springframework.boot:spring-boot-starter-web"
+    compile "org.springframework.boot:spring-boot-starter-web-services"
+    compile "org.springframework.boot:spring-boot-starter-websocket"
+    compile "org.springframework.boot:spring-boot-devtools"
+    compile "org.springframework:spring-context:4.3.6.RELEASE"
+    compile "org.springframework:spring-jdbc:4.3.6.RELEASE"
+    compile "org.springframework.boot:spring-boot-starter-data-redis"
+    compile "org.springframework.session:spring-session:1.3.0.RELEASE"
+    compile "org.apache.commons:commons-dbcp2:2.1.1"
+    compile "org.jtwig:jtwig-spring-boot-starter:5.+"
+    compile "org.jtwig:jtwig-hot-reloading-extension:5.+"
+    compile "org.jtwig:jtwig-spring-asset-extension:5.+"
+    compile "org.webjars:sockjs-client:1.1.2"
+    compile "org.webjars:stomp-websocket:2.3.3"
+    compile "org.webjars:momentjs:2.17.1"
+    compile "org.webjars:bootstrap:3.3.7-1"
+    compile "org.webjars:html5shiv:3.7.3"
+    compile "org.webjars:respond:1.4.2"
+    compile "org.webjars:jquery:3.1.1-1"
 
-			'org.webjars:sockjs-client:1.1.2',
-			'org.webjars:stomp-websocket:2.3.3',
-			'org.webjars:momentjs:2.17.1',
-			'org.webjars:bootstrap:3.3.7-1',
-			'org.webjars:html5shiv:3.7.3',
-			'org.webjars:respond:1.4.2',
-			'org.webjars:jquery:3.1.1-1'
-	)
+	runtime "mysql:mysql-connector-java:6.0.5"
 
-
-	runtime(
-			'mysql:mysql-connector-java:6.0.5'
-	)
-
-	testCompile(
-			'org.springframework.boot:spring-boot-starter-test',
-			'org.springframework:spring-test:4.3.6.RELEASE',
-			'junit:junit:4.12',
-			'org.hamcrest:hamcrest-library:1.3'
-	)
+	testCompile "org.springframework.boot:spring-boot-starter-test"
+    testCompile "org.springframework:spring-test:4.3.6.RELEASE"
+    testCompile "junit:junit:4.12"
+    testCompile "org.hamcrest:hamcrest-library:1.3"
 }
