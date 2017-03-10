@@ -1,0 +1,40 @@
+{% extends "_master.twig" %}
+{# using master template #}
+
+
+{% block title %}You have signed out{%endblock%}
+
+
+{% block content %}
+    <br /><br />
+
+    <div class="row" id="centeredContainer">
+
+        <div id="loginPanel" class="panel panel-default text-center">
+            <div class="panel-heading">
+                <h1 class="panel-title">You have signed out</h1>
+            </div>
+            <div class="panel-body" style="text-align: left;" id="chatPanelBody">
+
+                <a class="btn btn-block btn-default btn-log" href="{{ app_BASE_URL }}">Continue ...</a>
+
+            </div>
+        </div>
+
+
+    </div>
+
+{% endblock %}
+
+
+{% block extra_js %}
+
+
+{% endblock %}
+
+
+{% block extra_css %}
+
+    <meta http-equiv="refresh" content="1; url={{ app_BASE_URL }}">
+
+{% endblock %}

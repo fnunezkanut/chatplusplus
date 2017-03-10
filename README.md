@@ -1,4 +1,6 @@
-# chatplusplus
-A simple customer support chat coded in Spring using websockets, mysql and redis
+# prototype2
+prototype #2 of the chatplusplus application
 
-Continuing on from imaginatively name [prototype2](https://github.com/fnunezkanut/prototype2) (should have used branches...)
+a websocket chat written with Java Spring
+
+continued @ https://github.com/fnunezkanut/chatplusplus/

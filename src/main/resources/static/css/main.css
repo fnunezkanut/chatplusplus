@@ -1,0 +1,78 @@
+body{
+    background:url("/static/images/background.jpg") no-repeat center center fixed;
+    -webkit-background-size:cover;
+    -moz-background-size:cover;
+    -o-background-size:cover;
+    background-size:cover;
+    font-family: 'Roboto', sans-serif;
+}
+
+
+
+#loginPanel{
+
+    background: rgba(245, 245, 245, 0.8);
+    width: 66%;
+    margin: 0px auto;
+    font-family: 'Roboto', sans-serif;
+    top: -50px;
+}
+
+#chatPanel{
+
+    background: rgba(245, 245, 245, 0.9);
+    width: 90%;
+    margin: 0px auto;
+    font-family: 'Roboto', sans-serif;
+    top: -50px;
+}
+
+
+.vertical-center {
+    min-height: 100%;  /* Fallback for browsers do NOT support vh unit */
+    min-height: 100vh; /* These two lines are counted as one :-)       */
+
+    display: flex;
+    align-items: center;
+}
+
+.panel-title{
+    font-size: 150%;
+    font-weight: bold;
+    color: #95D600;
+}
+
+#logo{
+
+    font-family: 'Indie Flower', cursive;
+    color: white;
+    font-size: 200%;
+}
+
+#contact-support{
+
+    text-shadow: 0 0 3px #FF0000;
+    font-weight: bold;
+    color: darkred;
+}
+
+#contact-support-white{
+
+    text-shadow: 0 0 3px gray;
+    font-weight: bold;
+    color: white;
+}
+
+.messageTblName{
+
+    vertical-align: top;
+    width: 20%;
+    color: #041a3d;
+}
+
+.messageTblComment{
+
+    vertical-align: top;
+    font-family: 'Roboto', sans-serif;
+}
+

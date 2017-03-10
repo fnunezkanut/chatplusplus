@@ -1,0 +1,93 @@
+{% extends "_master.twig" %}
+{# using master template #}
+
+
+{% block title %}Login{%endblock%}
+
+
+{% block content %}
+    <br /><br />
+
+    <div class="row" id="centeredContainer">
+
+        <div id="loginPanel" class="panel panel-default text-center">
+            <div class="panel-heading">
+                <h1 class="panel-title">Customer Login</h1>
+            </div>
+            <div class="panel-body" style="text-align: left;" id="chatPanelBody">
+
+                <form id="contactForm">
+
+                    <div class="form-group">
+                        <label for="emailFld">Email:</label>
+                        <input type="email" class="form-control" id="emailFld" placeholder="Customer email" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="passwordFld">Password</label>
+                        <input type="password" class="form-control" id="passwordFld" />
+                    </div>
+
+                    <button type="submit" class="btn btn-lg btn-primary btn-block">continue</button>
+                </form>
+
+            </div>
+        </div>
+
+
+    </div>
+
+{% endblock %}
+
+
+{% block extra_js %}
+    <script type="text/javascript">
+		$(document).ready(function () {
+
+
+			var _chatUrl    = '{{ app_BASE_URL }}support';
+			var _currentUrl = '{{ app_BASE_URL }}login';
+			var _loginUrl   = '{{ app_BASE_URL }}login/submit';
+
+
+			$("#contactForm").submit(function (event) {
+
+				event.preventDefault();
+
+				var password = $('#passwordFld').val();
+				var email    = $('#emailFld').val();
+
+				//clear container
+				$('#chatPanelBody').empty().append('signing in...');
+
+				//send ajax request
+				$.ajax({
+					type: "POST",
+					dataType: "json",
+					url: _loginUrl,
+					data: {
+						"email": email,
+						"pass": password
+					},
+					success: function (data, textStatus, xhr) {
+
+						if (data.status == 'ok') {
+
+							$('#chatPanelBody').empty().append("You have successfully signed in, redirecting..." );
+							window.location = _chatUrl;
+						}
+						else {
+
+							$('#chatPanelBody').empty().append("ERROR: " + data.message );
+							window.location = _currentUrl;
+						}
+					},
+					error: function (xhr, textStatus, errorThrown) {
+
+						window.location = _currentUrl;
+					}
+				});
+			});
+		});
+    </script>
+{% endblock %}
