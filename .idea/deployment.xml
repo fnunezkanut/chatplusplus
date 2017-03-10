@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="PublishConfigData" serverName="192.168.56.101">
+    <serverData>
+      <paths name="192.168.56.101">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/home/server/chatplusplus/" local="$PROJECT_DIR$" web="/" />
+            <mapping deploy="/home/server/chatplusplus/src/test" local="$PROJECT_DIR$/src/test" web="/" />
+            <mapping deploy="/home/server/chatplusplus/src/main" local="$PROJECT_DIR$/src/main" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
+    </serverData>
+  </component>
+</project>
