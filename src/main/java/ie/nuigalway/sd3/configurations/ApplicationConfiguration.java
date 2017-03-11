@@ -19,9 +19,7 @@ import org.springframework.session.data.redis.config.annotation.web.http.EnableR
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
-
 import javax.sql.DataSource;
-import java.util.Collections;
 
 @Configuration
 @EnableWebMvc
@@ -47,6 +45,9 @@ public class ApplicationConfiguration extends WebMvcConfigurerAdapter implements
 
         return dataSource;
     }
+    //mysql connection datasource
+
+
 
     //configures jtwig
     @Override
@@ -66,16 +67,10 @@ public class ApplicationConfiguration extends WebMvcConfigurerAdapter implements
         );
         viewResolver.setSuffix(".twig");
     }
+    //configures jtwig
 
 
-    //the bean and override below configures static file loading from public
-    @Bean
-    public AssetResolver assetResolver() {
-        BaseAssetResolver assetResolver = new BaseAssetResolver();
-        assetResolver.setPrefix("public");
-        return assetResolver;
-    }
-
+    //configures static file loading
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
 
@@ -90,5 +85,5 @@ public class ApplicationConfiguration extends WebMvcConfigurerAdapter implements
         //favicon.ico file
         registry.addResourceHandler("/favicon.ico").addResourceLocations("classpath:static/favicon.ico");
     }
-    //the bean and override above configures static file loading from public
+    //configures static file loading
 }

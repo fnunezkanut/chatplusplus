@@ -1,0 +1,43 @@
+{% extends "_master.twig" %}
+{# using master template #}
+
+
+{% block title %}View past issues{% endblock %}
+
+
+{% block content %}
+
+    <br/>
+
+    <div class="row" id="centeredContainer">
+
+        <div id="chatPanel" class="panel panel-default text-center">
+            <div class="panel-heading">
+                <h1 class="panel-title">View past issues</h1>
+            </div>
+            <div class="panel-body" style="text-align: left;" id="createPanelBody">
+
+                <ul class="nav nav-pills nav-justified">
+
+                    <li role="presentation"><a href="/support">Create a new issue</a></li>
+
+                    <li role="presentation" class="active"><a href="{{ app_BASE_URL }}/history">View past issues</a></li>
+                </ul>
+
+                <br/>
+                <hr/>
+                <br/>
+
+                TODO
+
+            </div>
+        </div>
+
+
+    </div>
+
+{% endblock %}
+
+{% block extra_js %}
+{% endblock %}
+
