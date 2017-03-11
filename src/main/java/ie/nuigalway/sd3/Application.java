@@ -1,3 +1,10 @@
+/**
+ * @file Application.java
+ *
+ * spring execution starts from here
+ */
+
+
 package ie.nuigalway.sd3;
 
 import org.springframework.boot.SpringApplication;

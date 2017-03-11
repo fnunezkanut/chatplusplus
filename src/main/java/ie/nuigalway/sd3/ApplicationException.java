@@ -1,3 +1,9 @@
+/**
+ * @file ApplicationException.java
+ *
+ * custom exception
+ */
+
 package ie.nuigalway.sd3;
 
 public class ApplicationException extends RuntimeException {
