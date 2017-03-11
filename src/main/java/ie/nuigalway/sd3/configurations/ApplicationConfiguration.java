@@ -21,6 +21,7 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 import javax.sql.DataSource;
+import java.util.Collections;
 
 @Configuration
 @EnableWebMvc
@@ -85,6 +86,9 @@ public class ApplicationConfiguration extends WebMvcConfigurerAdapter implements
         if (!registry.hasMappingForPattern("/webjars/**")) {
             registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");
         }
+
+        //favicon.ico file
+        registry.addResourceHandler("/favicon.ico").addResourceLocations("classpath:static/favicon.ico");
     }
     //the bean and override above configures static file loading from public
 }

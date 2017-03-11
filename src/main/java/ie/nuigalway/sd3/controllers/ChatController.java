@@ -15,7 +15,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpSession;
 
 @Controller
-public class Chat {
+public class ChatController {
 
     //from .properties
     @Value("${app.RANDOM}")

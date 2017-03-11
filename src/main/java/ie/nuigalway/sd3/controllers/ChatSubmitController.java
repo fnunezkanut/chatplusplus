@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Map;
 
 @Controller
-public class ChatWebsocket {
+public class ChatSubmitController {
 
     @Autowired
     private ThreadService threadService;

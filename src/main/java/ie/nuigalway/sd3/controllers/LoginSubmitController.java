@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpSession;
 
 @RestController
-public class LoginSubmit {
+public class LoginSubmitController {
 
 
     @Autowired
