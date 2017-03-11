@@ -1,12 +1,12 @@
 package ie.nuigalway.sd3.services;
 
 
+import ie.nuigalway.sd3.entities.MessageView1;
 import ie.nuigalway.sd3.repositories.MessageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Map;
 
 
 @Service
@@ -23,7 +23,7 @@ public class MessageService {
     }
 
     //fetching all messages belonging to a thread
-    public List<Map<String, Object>> getMessagesByThreadId(Long threadId) {
+    public List<MessageView1> getMessagesByThreadId(Long threadId) {
 
         return messageRepository.getMessagesByThreadId(threadId);
     }

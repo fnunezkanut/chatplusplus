@@ -40,9 +40,7 @@ repositories {
 dependencies {
 
     compile(
-            'org.jtwig:jtwig-spring-boot-starter:5.+',
-            'org.jtwig:jtwig-hot-reloading-extension:5.+',
-            'org.jtwig:jtwig-spring-asset-extension:5.+',
+
             'org.springframework.boot:spring-boot-starter-web',
             'org.springframework.boot:spring-boot-starter-web-services',
             'org.springframework.boot:spring-boot-starter-websocket',
@@ -52,6 +50,10 @@ dependencies {
             'org.springframework.boot:spring-boot-starter-data-redis',
             'org.springframework.session:spring-session:1.3.0.RELEASE',
             'org.apache.commons:commons-dbcp2:2.1.1',
+
+            'org.jtwig:jtwig-spring-boot-starter:5.+',
+            'org.jtwig:jtwig-hot-reloading-extension:5.+',
+            'org.jtwig:jtwig-spring-asset-extension:5.+',
 
             'org.webjars:sockjs-client:1.1.2',
             'org.webjars:stomp-websocket:2.3.3',

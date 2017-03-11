@@ -81,7 +81,7 @@
                     var decodedMessage = jQuery.parseJSON(serverMessage.body);
                     if (decodedMessage.status == "ok") {
 
-                        renderMessages(decodedMessage.payload.messages);
+                        renderMessages(decodedMessage.payload);
                     }
                 });
             });
@@ -110,9 +110,8 @@
         }
 
 
-        function renderMessages(_messages) {
+        function renderMessages( messages) {
 
-            var messages = jQuery.parseJSON(_messages);
 
             var html = '<table class="table table-condensed table-striped">';
             $.each(messages, function (index, value) {

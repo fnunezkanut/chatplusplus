@@ -1,6 +1,7 @@
 package ie.nuigalway.sd3.repositories;
 
 import ie.nuigalway.sd3.entities.Message;
+import ie.nuigalway.sd3.entities.MessageView1;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.dao.DataAccessException;
@@ -37,6 +38,7 @@ public class MysqlMessageRepository implements MessageRepository {
     }
 
 
+
     //mapping sql result rows to Message objects
     private RowMapper<Message> messageMapperLambda = (rs, rowNum) -> {
 
@@ -51,20 +53,42 @@ public class MysqlMessageRepository implements MessageRepository {
     };
 
 
+    //mapping sql result rows to Message objects
+    private RowMapper<MessageView1> messageView1MapperLambda = (rs, rowNum) -> {
+
+        MessageView1 message = new MessageView1();
+        message.setId(rs.getLong("id"));
+        message.setThread_id(rs.getLong("thread_id"));
+        message.setUser_id(rs.getLong("user_id"));
+        message.setComment(rs.getString("comment"));
+        message.setDt_created(rs.getDate("dt_created"));
+
+        //extra (from User)
+        message.setName(rs.getString("name"));
+        short isSupport = rs.getShort("is_support");
+        if (isSupport == 1) {
+            message.setIsSupport(true);
+        } else {
+            message.setIsSupport(false);
+        }
+
+        return message;
+    };
+
     //fetch messages by thread_id
     @Override
-    public List<Map<String, Object>> getMessagesByThreadId(Long threadId) {
+    public List<MessageView1> getMessagesByThreadId(Long threadId) {
 
         String sqlTxt =
                 "SELECT messages.*, users.name, users.is_support FROM messages LEFT OUTER JOIN users ON users.id = messages.user_id WHERE thread_id = ? ORDER BY messages.id DESC";
 
 
-        List<Map<String, Object>> messages;
+        List<MessageView1> messages;
 
         //try to fetch all messages
         try {
 
-            messages = jdbcTemplate.queryForList(sqlTxt, threadId);
+            messages = jdbcTemplate.query(sqlTxt, messageView1MapperLambda, threadId);
         } catch (InvalidResultSetAccessException e) {
             throw new RuntimeException(e);
         } catch (DataAccessException e) {

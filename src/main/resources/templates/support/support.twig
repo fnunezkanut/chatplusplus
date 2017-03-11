@@ -42,12 +42,15 @@
                 url: _fetchThreadsUrl,
                 success: function (data, textStatus, xhr) {
 
+                    //our list of threads is contained in the payload bit of the json response
+                    var threads = data.payload;
+
 
                     //construct a list of issues
                     var html = '<div class="list-group">';
 
-                    //iterate over incoming JSON with thread lists
-                    $.each(data, function (index, value) {
+                    //iterate over threads
+                    $.each(threads, function (index, value) {
 
                         html += '<a href="{{ app_BASE_URL }}chat?threadId=' + value.id + '" class="list-group-item">'
                             + value.title + ' <span class="badge">' + value.dt_created + '</span></a>';

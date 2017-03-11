@@ -1,3 +1,8 @@
+/**
+ * @file ChatSubmitController
+ *
+ */
+
 package ie.nuigalway.sd3.controllers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -5,6 +10,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ie.nuigalway.sd3.ApplicationException;
 import ie.nuigalway.sd3.ApplicationResponse;
+import ie.nuigalway.sd3.entities.MessageView1;
 import ie.nuigalway.sd3.entities.Thread;
 import ie.nuigalway.sd3.entities.User;
 import ie.nuigalway.sd3.services.MessageService;
@@ -20,6 +26,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Controller
 public class ChatSubmitController {
@@ -58,7 +65,7 @@ public class ChatSubmitController {
             });
         } catch (IOException e) {
 
-            throw new ApplicationException(e.getMessage());
+            return new ApplicationResponse("error", "Invalid input");
         }
 
 
@@ -69,7 +76,7 @@ public class ChatSubmitController {
             dbUser = userService.getUser(Long.parseLong(jsonMap.get("user_id")));
         } catch (Exception e) {
 
-            throw new ApplicationException(e.getMessage());
+            return new ApplicationResponse("error", e.getMessage() );
         }
 
 
@@ -80,7 +87,7 @@ public class ChatSubmitController {
             dbThread = threadService.getThread(Long.parseLong(threadId));
         } catch (Exception e) {
 
-            throw new ApplicationException(e.getMessage());
+            return new ApplicationResponse("error", e.getMessage() );
         }
 
 
@@ -96,7 +103,7 @@ public class ChatSubmitController {
                 //all ok current user is a support person so allowed to respond
             } else {
 
-                throw new ApplicationException("Not allowed to access this thread");
+                return new ApplicationResponse("error", "Not allowed to access this thread" );
             }
         }
 
@@ -111,36 +118,32 @@ public class ChatSubmitController {
                 messageService.addMessageToThread(dbThread.getId(), dbUser.getId(), message);
             } catch (Exception e) {
 
-                return new ApplicationResponse("error", e.getMessage());
+                return new ApplicationResponse("error", e.getMessage() );
             }
         }
 
 
         //fetch all the messages for this thread (in reverse order)
-        List<Map<String, Object>> messages;
+        List<MessageView1> messages;
         try {
 
             messages = messageService.getMessagesByThreadId(dbThread.getId());
         } catch (Exception e) {
 
-            throw new ApplicationException(e.getMessage());
+            return new ApplicationResponse("error", e.getMessage() );
         }
 
 
-        //TODO hashmap response same as thread controller
-        //convert list to json
-        ObjectMapper mapper = new ObjectMapper();
-        String messagesJson = "";
-        try {
 
-            messagesJson = mapper.writeValueAsString(messages);
-        } catch (JsonProcessingException e) {
-            throw new ApplicationException(e.getMessage());
-        }
+        //convert from a MessageView1 list to a hashmap using java8 streams
+        Map<String, Object> messagesMap = messages.stream().collect(
 
-        //TODO double encoded bug here
+                Collectors.toMap(x -> x.getId().toString(), x -> x)
+        );
+
+
         ApplicationResponse ar = new ApplicationResponse("ok", "added");
-        ar.put("messages", messagesJson);
+        ar.setPayload( (HashMap<String, Object>) messagesMap );
         return ar;
     }
 }
