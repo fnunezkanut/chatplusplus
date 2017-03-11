@@ -38,7 +38,7 @@ public class ThreadController {
         User currentUser = (User) session.getAttribute("currentUser");
         if (currentUser == null) {
 
-            return new ApplicationResponse("error", "Current user is not signed in");
+            throw new ApplicationException("Current user is not signed in");
         }
 
 
@@ -49,14 +49,14 @@ public class ThreadController {
             newThreadId = threadService.createThread(title, currentUser.getId());
         } catch (Exception e) {
 
-            return new ApplicationResponse("error", e.getMessage());
+            throw new ApplicationException(e.getMessage());
         }
 
 
         //output successful json
-        ApplicationResponse jsonResponse = new ApplicationResponse("ok", "created");
-        jsonResponse.put("thread_id", Long.toString(newThreadId));
-        return jsonResponse;
+        ApplicationResponse ar = new ApplicationResponse("ok", "created");
+        ar.put("thread_id", Long.toString(newThreadId));
+        return ar;
 
     }
 
@@ -106,9 +106,9 @@ public class ThreadController {
 
 
         //return it all as a JSON response
-        ApplicationResponse r = new ApplicationResponse("ok", "fetched");
-        r.setPayload((HashMap<String, Object>) threadMap);
-        return r;
+        ApplicationResponse ar = new ApplicationResponse("ok", "fetched");
+        ar.setPayload((HashMap<String, Object>) threadMap);
+        return ar;
     }
 
 }

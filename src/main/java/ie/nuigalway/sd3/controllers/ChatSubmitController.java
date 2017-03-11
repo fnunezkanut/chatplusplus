@@ -3,6 +3,7 @@ package ie.nuigalway.sd3.controllers;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import ie.nuigalway.sd3.ApplicationException;
 import ie.nuigalway.sd3.ApplicationResponse;
 import ie.nuigalway.sd3.entities.Thread;
 import ie.nuigalway.sd3.entities.User;
@@ -57,7 +58,7 @@ public class ChatSubmitController {
             });
         } catch (IOException e) {
 
-            return new ApplicationResponse("error", e.getMessage());
+            throw new ApplicationException(e.getMessage());
         }
 
 
@@ -68,7 +69,7 @@ public class ChatSubmitController {
             dbUser = userService.getUser(Long.parseLong(jsonMap.get("user_id")));
         } catch (Exception e) {
 
-            return new ApplicationResponse("error", e.getMessage());
+            throw new ApplicationException(e.getMessage());
         }
 
 
@@ -79,7 +80,7 @@ public class ChatSubmitController {
             dbThread = threadService.getThread(Long.parseLong(threadId));
         } catch (Exception e) {
 
-            return new ApplicationResponse("error", e.getMessage());
+            throw new ApplicationException(e.getMessage());
         }
 
 
@@ -95,7 +96,7 @@ public class ChatSubmitController {
                 //all ok current user is a support person so allowed to respond
             } else {
 
-                return new ApplicationResponse("error", "Not allowed to access this thread");
+                throw new ApplicationException("Not allowed to access this thread");
             }
         }
 
@@ -122,10 +123,11 @@ public class ChatSubmitController {
             messages = messageService.getMessagesByThreadId(dbThread.getId());
         } catch (Exception e) {
 
-            return new ApplicationResponse("error", e.getMessage());
+            throw new ApplicationException(e.getMessage());
         }
 
 
+        //TODO hashmap response same as thread controller
         //convert list to json
         ObjectMapper mapper = new ObjectMapper();
         String messagesJson = "";
@@ -133,12 +135,12 @@ public class ChatSubmitController {
 
             messagesJson = mapper.writeValueAsString(messages);
         } catch (JsonProcessingException e) {
-            e.printStackTrace();
+            throw new ApplicationException(e.getMessage());
         }
 
-
-        ApplicationResponse jsonResponse = new ApplicationResponse("ok", "added");
-        jsonResponse.put("messages", messagesJson);
-        return jsonResponse;
+        //TODO double encoded bug here
+        ApplicationResponse ar = new ApplicationResponse("ok", "added");
+        ar.put("messages", messagesJson);
+        return ar;
     }
 }

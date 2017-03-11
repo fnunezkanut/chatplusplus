@@ -1,5 +1,6 @@
 package ie.nuigalway.sd3.controllers;
 
+import ie.nuigalway.sd3.ApplicationException;
 import ie.nuigalway.sd3.ApplicationResponse;
 import ie.nuigalway.sd3.entities.User;
 import ie.nuigalway.sd3.services.UserService;
@@ -46,15 +47,15 @@ public class LoginSubmitController {
 
             //save the user in session
             session.setAttribute("currentUser", dbUser);
-        } catch (Exception e) { //TODO better exception catching here
+        } catch (Exception e) {
 
-            return new ApplicationResponse("error", e.getMessage());
+            throw new ApplicationException(e.getMessage());
         }
 
 
         //output successful json
-        ApplicationResponse jsonResponse = new ApplicationResponse("ok", "signedin");
-        jsonResponse.put("user_id", dbUser.getId().toString());
-        return jsonResponse;
+        ApplicationResponse ar = new ApplicationResponse("ok", "signedin");
+        ar.put("user_id", dbUser.getId().toString());
+        return ar;
     }
 }
