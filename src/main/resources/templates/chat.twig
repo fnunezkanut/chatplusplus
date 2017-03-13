@@ -44,6 +44,7 @@
 {% endblock %}
 
 
+
 {% block extra_js %}
 
     <!-- we need sockjs and stomp libraries -->
@@ -51,6 +52,8 @@
     <script src="/webjars/stomp-websocket/2.3.3/stomp.min.js"></script>
     <script src="/webjars/momentjs/2.17.1/min/moment.min.js"></script>
     <script type="application/javascript">
+
+
 
 
         var stompClient = null;
@@ -113,8 +116,20 @@
         function renderMessages( messages) {
 
 
-            var html = '<table class="table table-condensed table-striped">';
+            //convert messages array
+            var messagesArray = [];
             $.each(messages, function (index, value) {
+
+                messagesArray.push( value );
+            });
+            //reverse messages array
+            messagesArray.reverse();
+
+            console.log( messagesArray );
+
+
+            var html = '<table class="table table-condensed table-striped">';
+            $.each(messagesArray, function (index, value) {
 
                 //var dt = new Date( value.dt_created );
                 var formatted = moment(value.dt_created).format('MM/DD/YYYY hh:mm a')
