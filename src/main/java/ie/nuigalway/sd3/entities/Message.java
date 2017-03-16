@@ -21,12 +21,11 @@ public class Message {
             String comment,
             Date dt_created
     ) {
-        this.user_id = user_id;
-        this.thread_id = thread_id;
-        this.comment = comment;
-        this.dt_created = dt_created;
+        setUser_id( user_id );
+        setThread_id( thread_id);
+        setComment( comment );
+        setDt_created( dt_created );
     }
-
     //constructors
 
 
@@ -86,16 +85,5 @@ public class Message {
     @Override
     public int hashCode() {
         return getId().hashCode();
-    }
-
-    @Override
-    public String toString() {
-        return "Message{" +
-                "id=" + id +
-                ", user_id=" + user_id +
-                ", thread_id=" + thread_id +
-                ", comment='" + comment + '\'' +
-                ", dt_created=" + dt_created +
-                '}';
     }
 }

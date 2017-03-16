@@ -12,6 +12,10 @@ apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'org.springframework.boot'
 
+apply plugin: 'jacoco'
+
+
+
 //gets a formatted date
 def getDate() {
     def date = new Date()
@@ -77,3 +81,22 @@ dependencies {
     )
 }
 
+jacoco {
+    toolVersion = '0.7.6.201602180812'
+    reportsDir = file("$buildDir/customJacocoReportDir")
+}
+
+jacocoTestReport {
+
+    reports{
+
+        html.enabled = true
+        xml.enabled = false
+        csv.enabled = false
+    }
+}
+
+//execute jacocoTestReport after test task is completed
+test {
+    finalizedBy jacocoTestReport
+}

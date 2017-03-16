@@ -17,15 +17,15 @@ public class Thread {
     }
 
     public Thread(Long id, String title) {
-        this.id = id;
-        this.title = title;
+        setId( id );
+        setTitle( title );
     }
 
     public Thread(Long id, String title, Date dt_created, Date dt_updated) {
-        this.id = id;
-        this.title = title;
-        this.dt_created = dt_created;
-        this.dt_updated = dt_updated;
+        setId( id );
+        setTitle( title );
+        setDt_created( dt_created );
+        setDt_updated( dt_updated );
     }
     //constructors
 
@@ -86,16 +86,5 @@ public class Thread {
     @Override
     public int hashCode() {
         return getId().hashCode();
-    }
-
-    @Override
-    public String toString() {
-        return "Thread{" +
-                "id=" + id +
-                ", title='" + title + '\'' +
-                ", dt_created=" + dt_created +
-                ", dt_updated=" + dt_updated +
-                ", customer_id=" + customer_id +
-                '}';
     }
 }

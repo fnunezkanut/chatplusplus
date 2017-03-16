@@ -74,9 +74,9 @@ public class User implements Serializable {
         if (this == o) return true;
         if (!(o instanceof User)) return false;
 
-        User thread = (User) o;
+        User user = (User) o;
 
-        return getId().equals(thread.getId());
+        return getId().equals(user.getId());
     }
 
     @Override
