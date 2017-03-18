@@ -43,6 +43,17 @@ public class LoginSubmitController {
             throw new ApplicationException("no such user");
         }
 
+
+
+        //update user last updated datetime
+        try{
+
+            userService.updateDtUpdated( dbUser.getId() );
+        }
+        catch (Exception e){}
+
+
+
         //get session value
         String SESSION_VALUE = RequestContextHolder.currentRequestAttributes().getSessionId();
 

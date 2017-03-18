@@ -43,4 +43,11 @@ public class ThreadService {
 
         return threadRepository.createThread(title, customerId);
     }
+
+
+    //update updated datetime field
+    public void updateDtUpdated( Long threadId ){
+
+        threadRepository.updateDtUpdated( threadId );
+    }
 }

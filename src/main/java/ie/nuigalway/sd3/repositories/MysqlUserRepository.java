@@ -3,14 +3,14 @@ package ie.nuigalway.sd3.repositories;
 import ie.nuigalway.sd3.entities.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
-import org.springframework.dao.DataAccessException;
-import org.springframework.jdbc.InvalidResultSetAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.sql.DataSource;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 
 
 @Repository
@@ -57,9 +57,8 @@ public class MysqlUserRepository implements UserRepository {
         try {
 
             user = jdbcTemplate.queryForObject(sqlTxt, userMapperLambda, id);
-        } catch (InvalidResultSetAccessException e) {
-            throw new RuntimeException(e);
-        } catch (DataAccessException e) {
+        } catch (Exception e) {
+
             throw new RuntimeException(e);
         }
 
@@ -76,20 +75,30 @@ public class MysqlUserRepository implements UserRepository {
         try {
 
             user = jdbcTemplate.queryForObject(sqlTxt, userMapperLambda, email, passhash);
-        } catch (InvalidResultSetAccessException e) {
-            throw new RuntimeException(e);
-        } catch (DataAccessException e) {
+        } catch (Exception e) {
+
             throw new RuntimeException(e);
         }
-
-        //TODO better exceptions
 
         return user;
     }
 
     @Override
-    public void updateDtUpdated(Long id) {
+    public void updateDtUpdated(Long userId) {
 
-        //TODO update on login time
+        String sqlTxt = "UPDATE users SET dt_updated=? WHERE id=?";
+
+        //current time used at insert time
+        java.util.Date dt = new java.util.Date();
+        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+
+        //try to update entry to mysql
+        try {
+
+            jdbcTemplate.update(sqlTxt, dateFormat.format(dt), userId);
+        } catch (Exception e) {
+
+            throw new RuntimeException(e);
+        }
     }
 }

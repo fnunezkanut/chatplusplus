@@ -14,5 +14,5 @@ public interface ThreadRepository {
 
     Long createThread(String title, Long customerId);
 
-    void updateDtUpdated(Long id);
+    void updateDtUpdated(Long threadId);
 }

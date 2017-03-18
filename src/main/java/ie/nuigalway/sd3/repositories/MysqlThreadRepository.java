@@ -3,8 +3,6 @@ package ie.nuigalway.sd3.repositories;
 import ie.nuigalway.sd3.entities.Thread;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
-import org.springframework.dao.DataAccessException;
-import org.springframework.jdbc.InvalidResultSetAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -18,6 +16,7 @@ import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -49,19 +48,17 @@ public class MysqlThreadRepository implements ThreadRepository {
     @Override
     public List<Thread> getThreads() {
 
+        List<Thread> threads = new ArrayList<>();
         String sqlTxt = "SELECT * FROM threads";
-        List<Thread> threads;
 
         //try to fetch all threads
         try {
 
             threads = jdbcTemplate.query(sqlTxt, threadMapperLambda);
-        } catch (InvalidResultSetAccessException e) {
-            throw new RuntimeException(e);
-        } catch (DataAccessException e) {
+        } catch (Exception e) {
+
             throw new RuntimeException(e);
         }
-
 
         return threads;
     }
@@ -70,18 +67,16 @@ public class MysqlThreadRepository implements ThreadRepository {
     @Override
     public List<Thread> getThreadsByCustomerId(Long customerId) {
 
+        List<Thread> threads = new ArrayList<>();
         String sqlTxt = "SELECT * FROM threads WHERE customer_id = ? ORDER BY thread.id DESC";
-        List<Thread> threads;
 
         try {
 
             threads = jdbcTemplate.query(sqlTxt, threadMapperLambda, customerId);
-        } catch (InvalidResultSetAccessException e) {
-            throw new RuntimeException(e);
-        } catch (DataAccessException e) {
+        } catch (Exception e) {
+
             throw new RuntimeException(e);
         }
-        //TODO better exception handling
 
         return threads;
     }
@@ -98,9 +93,9 @@ public class MysqlThreadRepository implements ThreadRepository {
         try {
 
             thread = jdbcTemplate.queryForObject(sqlTxt, threadMapperLambda, id);
-        } catch (InvalidResultSetAccessException e) {
-            throw new RuntimeException(e);
-        } catch (DataAccessException e) {
+
+        } catch (Exception e) {
+
             throw new RuntimeException(e);
         }
 
@@ -135,9 +130,8 @@ public class MysqlThreadRepository implements ThreadRepository {
                     },
                     keyHolder
             );
-        } catch (InvalidResultSetAccessException e) {
-            throw new RuntimeException(e);
-        } catch (DataAccessException e) {
+        } catch (Exception e) {
+
             throw new RuntimeException(e);
         }
 
@@ -150,7 +144,7 @@ public class MysqlThreadRepository implements ThreadRepository {
 
     //updates the last udpated datetime for a row
     @Override
-    public void updateDtUpdated(Long id) {
+    public void updateDtUpdated(Long threadId) {
 
         String sqlTxt = "UPDATE threads SET dt_updated=? WHERE id=?";
 
@@ -161,14 +155,10 @@ public class MysqlThreadRepository implements ThreadRepository {
         //try to update entry to mysql
         try {
 
-            jdbcTemplate.update(sqlTxt, dateFormat.format(dt), id);
-        } catch (InvalidResultSetAccessException e) {
-            throw new RuntimeException(e);
-        } catch (DataAccessException e) {
+            jdbcTemplate.update(sqlTxt, dateFormat.format(dt), threadId);
+        } catch (Exception e) {
+
             throw new RuntimeException(e);
         }
-
     }
-
-    //TODO sql unit test
 }

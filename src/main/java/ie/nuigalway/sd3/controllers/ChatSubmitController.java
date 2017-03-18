@@ -135,6 +135,15 @@ public class ChatSubmitController {
 
 
 
+        //update thread last updated datetime
+        try{
+
+            threadService.updateDtUpdated( dbThread.getId() );
+        }
+        catch (Exception e){}
+
+
+
         //convert from a MessageView1 list to a hashmap using java8 streams
         Map<String, Object> messagesMap = messages.stream().collect(
 

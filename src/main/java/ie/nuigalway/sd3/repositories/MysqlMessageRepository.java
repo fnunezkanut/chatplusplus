@@ -20,7 +20,6 @@ import java.sql.Statement;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.List;
-import java.util.Map;
 
 
 @Repository
@@ -36,7 +35,6 @@ public class MysqlMessageRepository implements MessageRepository {
 
         jdbcTemplate = new JdbcTemplate(dataSource);
     }
-
 
 
     //mapping sql result rows to Message objects
