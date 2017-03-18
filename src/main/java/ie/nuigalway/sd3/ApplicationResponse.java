@@ -21,6 +21,8 @@ public class ApplicationResponse{
         setMessage(message);
     }
 
+    public ApplicationResponse(){}
+
     public String getStatus() {
         return status;
     }
@@ -56,5 +58,16 @@ public class ApplicationResponse{
     //add entry to payload
     public void put(String key, Object val) {
         this.payload.put(key, val);
+    }
+
+    //fetches entry from payload (if exists)
+    public Object getFromPayload( String key ){
+        if( this.payload.containsKey( key) ){
+            return this.payload.get( key );
+        }
+        else{
+
+            return null;
+        }
     }
 }

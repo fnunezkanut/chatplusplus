@@ -17,15 +17,15 @@ public class Thread {
     }
 
     public Thread(Long id, String title) {
-        setId( id );
-        setTitle( title );
+        setId(id);
+        setTitle(title);
     }
 
     public Thread(Long id, String title, Date dt_created, Date dt_updated) {
-        setId( id );
-        setTitle( title );
-        setDt_created( dt_created );
-        setDt_updated( dt_updated );
+        setId(id);
+        setTitle(title);
+        setDt_created(dt_created);
+        setDt_updated(dt_updated);
     }
     //constructors
 

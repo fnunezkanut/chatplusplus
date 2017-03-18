@@ -18,8 +18,8 @@ public class MessageView1 extends Message {
 
     public MessageView1(Long user_id, Long thread_id, String comment, Date dt_created, String name, boolean is_support) {
         super(user_id, thread_id, comment, dt_created);
-        this.name = name;
-        this.is_support = is_support;
+        setName( name );
+        setIsSupport( is_support );
     }
 
     public String getName() {

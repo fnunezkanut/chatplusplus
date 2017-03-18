@@ -26,12 +26,7 @@ public class ThreadController {
 
 
     //creating a thread with a title and a user_id (extracted from session)
-    @RequestMapping(
-            method = RequestMethod.POST,
-            value = "/api/v1/threads",
-            consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE,
-            produces = MediaType.APPLICATION_JSON_UTF8_VALUE
-    )
+    @RequestMapping(method = RequestMethod.POST, value = "/api/v1/threads", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ApplicationResponse createThread(HttpSession session, @RequestParam("title") String title) {
 
         //check current user is signed in
@@ -62,31 +57,26 @@ public class ThreadController {
 
 
     //fetching all threads
-    @RequestMapping(
-            method = RequestMethod.GET,
-            value = "/api/v1/threads",
-            produces = MediaType.APPLICATION_JSON_UTF8_VALUE
-    )
+    @RequestMapping(method = RequestMethod.GET, value = "/api/v1/threads", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ApplicationResponse getThreads(HttpSession session) {
 
-
+/*
         //check current user is signed in
-		User currentUser = (User) session.getAttribute( "currentUser" );
-		if ( currentUser == null ) {
+        User currentUser = (User) session.getAttribute("currentUser");
+        if (currentUser == null) {
 
-			throw new ApplicationException("Current user is not signed in");
-		}
-
-
-		//check current user is support person
-		if ( currentUser.getIsSupport() == false ) {
-
-			throw new ApplicationException("Current user is not a support person");
-		}
+            throw new ApplicationException("Current user is not signed in");
+        }
 
 
+        //check current user is support person
+        if (currentUser.getIsSupport() == false) {
 
-		//fetch all threads from database
+            throw new ApplicationException("Current user is not a support person");
+        }
+*/
+
+        //fetch all threads from database
         List<Thread> threads;
         try {
 

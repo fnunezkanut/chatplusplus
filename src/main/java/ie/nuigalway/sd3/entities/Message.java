@@ -15,16 +15,12 @@ public class Message {
     public Message() {
     }
 
-    public Message(
-            Long user_id,
-            Long thread_id,
-            String comment,
-            Date dt_created
-    ) {
-        setUser_id( user_id );
-        setThread_id( thread_id);
-        setComment( comment );
-        setDt_created( dt_created );
+
+    public Message(Long user_id, Long thread_id, String comment, Date dt_created) {
+        setUser_id(user_id);
+        setThread_id(thread_id);
+        setComment(comment);
+        setDt_created(dt_created);
     }
     //constructors
 
