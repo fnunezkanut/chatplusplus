@@ -2,6 +2,7 @@ package ie.nuigalway.sd3.repositories;
 
 import ie.nuigalway.sd3.entities.Message;
 import ie.nuigalway.sd3.entities.MessageView1;
+import ie.nuigalway.sd3.entities.Thread;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.dao.DataAccessException;
@@ -87,9 +88,8 @@ public class MysqlMessageRepository implements MessageRepository {
         try {
 
             messages = jdbcTemplate.query(sqlTxt, messageView1MapperLambda, threadId);
-        } catch (InvalidResultSetAccessException e) {
-            throw new RuntimeException(e);
-        } catch (DataAccessException e) {
+        } catch (Exception e) {
+
             throw new RuntimeException(e);
         }
 
@@ -126,17 +126,35 @@ public class MysqlMessageRepository implements MessageRepository {
                     },
                     keyHolder
             );
-        } catch (InvalidResultSetAccessException e) {
-
-            throw new RuntimeException(e);
-        } catch (DataAccessException e) {
+        } catch (Exception e) {
 
             throw new RuntimeException(e);
         }
 
         //get the autoincrement id from the insert statement
-        Long insertId = keyHolder.getKey().longValue();
+        Long messageId = keyHolder.getKey().longValue();
 
-        return insertId;
+        return messageId;
+    }
+
+
+    //get a single message given its unique id
+    @Override
+    public Message getMessage(Long messageId) {
+
+        Message message;
+        String sqlTxt = "SELECT * FROM messages WHERE id=?";
+
+        //try to fetch a single entry from table
+        try {
+
+            message = jdbcTemplate.queryForObject(sqlTxt, messageMapperLambda, messageId);
+
+        } catch (Exception e) {
+
+            throw new RuntimeException(e);
+        }
+
+        return message;
     }
 }

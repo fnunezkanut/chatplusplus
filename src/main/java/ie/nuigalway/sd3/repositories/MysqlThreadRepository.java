@@ -63,6 +63,8 @@ public class MysqlThreadRepository implements ThreadRepository {
         return threads;
     }
 
+
+
     //fetch threads by customer id
     @Override
     public List<Thread> getThreadsByCustomerId(Long customerId) {

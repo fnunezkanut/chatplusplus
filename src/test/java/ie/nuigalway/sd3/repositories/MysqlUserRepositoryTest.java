@@ -1,5 +1,6 @@
 package ie.nuigalway.sd3.repositories;
 
+import ie.nuigalway.sd3.entities.User;
 import ie.nuigalway.sd3.services.UserService;
 import org.junit.After;
 import org.junit.Before;
@@ -56,12 +57,84 @@ public class MysqlUserRepositoryTest {
                 "\t1\n" +
                 ");"
         );
+
+        jdbcTemplate.execute("INSERT INTO users ( \n" +
+                "\tname,\n" +
+                "\temail,\n" +
+                "\tpasshash,\n" +
+                "\tdt_created,\n" +
+                "\tdt_updated,\n" +
+                "\tis_support\n" +
+                ") VALUES (\n" +
+                "\t\"Customer\",\n" +
+                "\t\"customer@example.com\",\n" +
+                "\t\"5F4DCC3B5AA765D61D8327DEB882CF99\",\n" +
+                "\tDATE(NOW()),\n" +
+                "\tDATE(NOW()),\n" +
+                "\t0\n" +
+                ");"
+        );
     }
 
     @After
     public void tearDown() {
         jdbcTemplate.execute("DROP TABLE IF EXISTS users");
     }
+
+    @Test
+    public void check_getUser() throws Exception {
+
+        long userId = 1L;
+
+        User user = this.userService.getUser( userId );
+        assertEquals( true, user instanceof User);
+        assertEquals( true, user.getId().equals( userId ));
+
+        User user2 = this.userService.getUser( 2L );
+        assertEquals( true, user2.getId().equals( 2L ));
+
+        //truncate everything in threads table so its empty
+        jdbcTemplate.execute("TRUNCATE TABLE users");
+
+        //check single fetch
+        try{
+
+            this.userService.getUser( 1L );
+            fail("#1 exception is expected");
+        }
+        catch (Exception e){
+
+            assert(true);
+        }
+    }
+
+
+    @Test
+    public void check_getUserByEmailAndPasshash() throws Exception {
+
+        String email = "admin@example.com";
+        String pashash = "5F4DCC3B5AA765D61D8327DEB882CF99";
+
+        User user = this.userService.getUserByEmailAndPasshash(email, pashash );
+        assertEquals( true, user instanceof User);
+        assertEquals( true, user.getEmail().equals( email ));
+        assertEquals( true, user.getPass().equals( pashash ));
+
+        //truncate everything in threads table so its empty
+        jdbcTemplate.execute("TRUNCATE TABLE users");
+
+        //check single fetch
+        try{
+
+            this.userService.getUserByEmailAndPasshash(email, pashash );
+            fail("#1 exception is expected");
+        }
+        catch (Exception e){
+
+            assert(true);
+        }
+    }
+
 
 
     @Test

@@ -18,7 +18,7 @@ import java.text.SimpleDateFormat;
 @Transactional
 public class MysqlUserRepository implements UserRepository {
 
-    //our jdbc tempate
+    //our jdbc template
     private JdbcTemplate jdbcTemplate;
 
     @Autowired

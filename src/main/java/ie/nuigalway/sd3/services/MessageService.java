@@ -1,6 +1,7 @@
 package ie.nuigalway.sd3.services;
 
 
+import ie.nuigalway.sd3.entities.Message;
 import ie.nuigalway.sd3.entities.MessageView1;
 import ie.nuigalway.sd3.repositories.MessageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,5 +27,11 @@ public class MessageService {
     public List<MessageView1> getMessagesByThreadId(Long threadId) {
 
         return messageRepository.getMessagesByThreadId(threadId);
+    }
+
+    //fetches a single message
+    public Message getMessage( long messageId ){
+
+        return messageRepository.getMessage( messageId );
     }
 }
