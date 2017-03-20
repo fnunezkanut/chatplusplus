@@ -135,10 +135,22 @@ public class ThreadControllerTest {
         MvcResult mvcResult = mockMvc.perform(
                 MockMvcRequestBuilders.get( "/api/v1/threads" )
                         .contentType(MediaType.APPLICATION_JSON)
+                        .session(mockSession)
         )
                 .andExpect(status().is4xxClientError() )
                 .andReturn();
 
+
+        //get result
+        MockHttpServletResponse response = mvcResult.getResponse();
+
+        //map response to response object
+        ObjectMapper mapper = new ObjectMapper();
+        ApplicationResponse ar = mapper.readValue( response.getContentAsString(), ApplicationResponse.class );
+
+
+        assertEquals( true, ar.getStatus().toLowerCase().equals("error"));
+        assertEquals( true, ar.getMessage().toLowerCase().equals("current user is not a support person"));
     }
 
 
@@ -204,8 +216,9 @@ public class ThreadControllerTest {
 
 
         assertEquals( true, ar.getStatus().toLowerCase().equals("error"));
-        assertEquals( true, ar.getMessage().toLowerCase().equals("Current user is not signed in"));
+        assertEquals( true, ar.getMessage().toLowerCase().equals("current user is not signed in"));
     }
+
 
 
     @Test
@@ -240,4 +253,69 @@ public class ThreadControllerTest {
         assertEquals( true, ar.getStatus().toLowerCase().equals("ok"));
         assertEquals( 0, ar.getPayload().size());
     }
+
+
+    @Test
+    public void test_createThread()  throws Exception{
+
+        //fetch customer user and create a mock session for him
+        User dbUser = new User();
+        String pass = "password";
+        String email = "customer@example.com";
+        String passwordHash = DigestUtils.md5Hex(pass).toUpperCase();
+        dbUser = userService.getUserByEmailAndPasshash(email, passwordHash);
+        mockSession.setAttribute("currentUser", dbUser);
+
+
+        String title = "test thread";
+
+
+
+        MvcResult mvcResult = mockMvc.perform(
+                MockMvcRequestBuilders.post( "/api/v1/threads" )
+                        .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+                        .param("title", title )
+                        .session(mockSession)
+        )
+                .andExpect(status().isOk() )
+                .andReturn();
+
+        //get result
+        MockHttpServletResponse response = mvcResult.getResponse();
+
+        //map response to response object
+        ObjectMapper mapper = new ObjectMapper();
+        ApplicationResponse ar = mapper.readValue( response.getContentAsString(), ApplicationResponse.class );
+
+        assertEquals( true, ar.getStatus().toLowerCase().equals("ok"));
+        assertEquals( true, ar.getMessage().toLowerCase().equals("created"));
+    }
+
+
+
+    @Test
+    public void test_createThread_as_unauthorized_user() throws Exception {
+
+        String title = "test thread";
+
+        MvcResult mvcResult = mockMvc.perform(
+                MockMvcRequestBuilders.post( "/api/v1/threads" )
+                        .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+                        .param("title", title )
+        )
+                .andExpect(status().is4xxClientError() )
+                .andReturn();
+
+
+        //get result
+        MockHttpServletResponse response = mvcResult.getResponse();
+
+        //map response to response object
+        ObjectMapper mapper = new ObjectMapper();
+        ApplicationResponse ar = mapper.readValue( response.getContentAsString(), ApplicationResponse.class );
+
+        assertEquals( true, ar.getStatus().toLowerCase().equals("error"));
+        assertEquals( true, ar.getMessage().toLowerCase().equals("current user is not signed in"));
+    }
+
 }

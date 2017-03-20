@@ -38,21 +38,14 @@ public class ThreadController {
 
 
         //create a new thread
-        Long newThreadId;
-        try {
+        Long newThreadId = threadService.createThread(title, currentUser.getId());
 
-            newThreadId = threadService.createThread(title, currentUser.getId());
-        } catch (Exception e) {
-
-            throw new ApplicationException(e.getMessage());
-        }
 
 
         //output successful json
         ApplicationResponse ar = new ApplicationResponse("ok", "created");
         ar.put("thread_id", Long.toString(newThreadId));
         return ar;
-
     }
 
 
@@ -70,22 +63,14 @@ public class ThreadController {
 
 
         //check current user is support person
-        if (currentUser.getIsSupport() == false) {
+        if (!currentUser.getIsSupport()) {
 
             throw new ApplicationException("Current user is not a support person");
         }
 
 
         //fetch all threads from database
-        List<Thread> threads;
-        try {
-
-            threads = threadService.getThreads();
-
-        } catch (Exception e) {
-
-            throw new ApplicationException("Unable to fetch threads");
-        }
+        List<Thread> threads = threads = threadService.getThreads();
 
 
         //convert from a Thread list to a hashmap using java8 streams
@@ -117,7 +102,6 @@ public class ThreadController {
 
         //fetch all threads from database
         List<Thread> threads = threadService.getThreadsByCustomerId(currentUser.getId());
-
 
 
         //convert from a Thread list to a hashmap using java8 streams

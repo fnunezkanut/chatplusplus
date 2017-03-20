@@ -40,14 +40,7 @@ public class ChatController {
 
 
             //fetch this thread from database
-            Thread thread;
-            try {
-
-                thread = threadService.getThread(Long.parseLong(threadId));
-            } catch (Exception e) {
-
-                throw new ApplicationException("no such thread");
-            }
+            Thread thread = threadService.getThread(Long.parseLong(threadId));
 
 
             //if the current user is not support person check if he/she is allowed to access this thread
