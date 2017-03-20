@@ -1,5 +1,6 @@
 package ie.nuigalway.sd3.controllers;
 
+import ie.nuigalway.sd3.ApplicationException;
 import ie.nuigalway.sd3.entities.Thread;
 import ie.nuigalway.sd3.entities.User;
 import ie.nuigalway.sd3.services.ThreadService;
@@ -23,21 +24,11 @@ public class ChatController {
     @Value("${app.BASE_URL}")
     String app_BASE_URL;
 
-
     @Autowired
     private ThreadService threadService;
 
-
-    @RequestMapping(
-            value = "/chat",
-            produces = MediaType.TEXT_HTML_VALUE
-    )
-    public ModelAndView action(
-            ModelMap model,
-            HttpSession session,
-            @RequestParam("threadId") String threadId
-    ) {
-
+    @RequestMapping(value = "/chat", produces = MediaType.TEXT_HTML_VALUE)
+    public ModelAndView action(ModelMap model, HttpSession session, @RequestParam("threadId") String threadId) {
 
         //get current user from session
         User currentUser = (User) session.getAttribute("currentUser");
@@ -53,9 +44,9 @@ public class ChatController {
             try {
 
                 thread = threadService.getThread(Long.parseLong(threadId));
-            } catch (Exception e) { //TODO better exception catching here
+            } catch (Exception e) {
 
-                return new ModelAndView("_error", "errorMsg", e.getMessage());
+                throw new ApplicationException("no such thread");
             }
 
 
@@ -64,7 +55,7 @@ public class ChatController {
 
                 if (!thread.getCustomerId().equals(currentUser.getId())) {
 
-                    return new ModelAndView("_error", "errorMsg", "You are not allowed to view this thread");
+                    throw new ApplicationException("You are not allowed to view this thread");
                 }
             }
 

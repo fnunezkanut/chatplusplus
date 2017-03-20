@@ -19,16 +19,16 @@
 
                 <ul class="nav nav-pills nav-justified">
 
-                    <li role="presentation"><a href="/support">Create a new issue</a></li>
+                    <li role="presentation"><a href="{{ app_BASE_URL }}support">Create a new issue</a></li>
 
-                    <li role="presentation" class="active"><a href="{{ app_BASE_URL }}/history">View past issues</a></li>
+                    <li role="presentation" class="active"><a href="{{ app_BASE_URL }}history">View past issues</a></li>
                 </ul>
 
                 <br/>
                 <hr/>
                 <br/>
 
-                TODO
+                <div id="pastIssuesFld"></div>
 
             </div>
         </div>
@@ -39,5 +39,48 @@
 {% endblock %}
 
 {% block extra_js %}
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+
+            var _currentUrl = '{{ app_BASE_URL }}support';
+            var _fetchThreadsUrl = '{{ app_BASE_URL }}api/v1/threads/my';
+
+            //send ajax request to fetch a list of all the threads
+            $.ajax({
+                type: "GET",
+                dataType: "json",
+                url: _fetchThreadsUrl,
+                success: function (data, textStatus, xhr) {
+
+                    //our list of threads is contained in the payload bit of the json response
+                    var threads = data.payload;
+
+
+                    //construct a list of issues
+                    var html = '<div class="list-group">';
+
+                    //iterate over threads
+                    $.each(threads, function (index, value) {
+
+                        html += '<a href="{{ app_BASE_URL }}chat?threadId=' + value.id + '" class="list-group-item">'
+                            + value.title + ' <span class="badge">' + value.dt_created + '</span></a>';
+                    });
+
+                    html += '</div>';
+
+                    //add constructed html list into the chat panel
+                    $('#pastIssuesFld').empty().append(html);
+                },
+                error: function (xhr, textStatus, errorThrown) {
+
+                    $('#pastIssuesFld').empty().append('unable to fetch list of issues');
+                }
+            });
+
+        });
+    </script>
+
 {% endblock %}
 

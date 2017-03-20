@@ -1,7 +1,9 @@
 package ie.nuigalway.sd3.controllers.api;
 
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 import ie.nuigalway.sd3.ApplicationException;
-import ie.nuigalway.sd3.entities.Thread;
+import ie.nuigalway.sd3.ApplicationResponse;
 import ie.nuigalway.sd3.entities.User;
 import ie.nuigalway.sd3.services.ThreadService;
 import ie.nuigalway.sd3.services.UserService;
@@ -9,57 +11,58 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.RequestBuilder;
-import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.UUID;
 
 import static org.junit.Assert.*;
-import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
+
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class ThreadControllerTest {
 
-    @Mock
+    @Autowired
     private ThreadService threadService;
 
-    @Mock
+    @Autowired
     private UserService userService;
 
     @Autowired
     private WebApplicationContext wac;
 
-    @Autowired
-    private TestRestTemplate restTemplate;
+    protected MockMvc mockMvc;
+    protected MockHttpSession mockSession;
 
-    //testwide mockmvc object
-    MockMvc mockMvc;
 
 
     @Before
-    public void setup(){
+    public void setup() throws Exception{
 
         this.mockMvc = webAppContextSetup( this.wac ).build();
+        mockSession = new MockHttpSession(wac.getServletContext(), UUID.randomUUID().toString() );
+
+        //fetch admin user and create a mock session for him
+        User dbUser = new User();
+        String pass = "password";
+        String email = "admin@example.com";
+        String passwordHash = DigestUtils.md5Hex(pass).toUpperCase();
+        dbUser = userService.getUserByEmailAndPasshash(email, passwordHash);
+        mockSession.setAttribute("currentUser", dbUser);
     }
 
 
@@ -72,35 +75,33 @@ public class ThreadControllerTest {
 
 
     @Test
-    public void getThreads() throws Exception {
+    public void test_getThreads() throws Exception {
 
-        MockHttpSession mockHttpSession = new MockHttpSession();
-        String password = "password";
-        String email = "admin@example.com";
+        //we want to pass a signed in user session cookie into our request
+        User currentUser = (User)mockSession.getAttribute("currentUser");
 
         MvcResult mvcResult = mockMvc.perform(
-                MockMvcRequestBuilders.post( "/login/submit" )
-                        .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-                        .param("email", email)
-                        .param("pass", password )
-                )
-                .andExpect(status().isOk() )
-                .andReturn();
+            MockMvcRequestBuilders.get( "/api/v1/threads" )
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .session(mockSession)
+            )
+            .andExpect(status().isOk() )
+            .andExpect( content().contentTypeCompatibleWith( MediaType.APPLICATION_JSON_UTF8_VALUE ))
+            .andReturn();
 
+        //get result
+        MockHttpServletResponse response = mvcResult.getResponse();
 
+        //map response to response object
+        ObjectMapper mapper = new ObjectMapper();
+        ApplicationResponse ar = mapper.readValue( response.getContentAsString(), ApplicationResponse.class );
 
+        assertEquals( true, ar.getStatus().toLowerCase().equals("ok"));
+        assertEquals( true, ar.getMessage().toLowerCase().equals("fetched"));
 
-        List<Thread> threads = new ArrayList<Thread>();
+        //examine payload
+        HashMap<String, Object> threads = ar.getPayload();
 
-        when(threadService.getThreads()).thenReturn((List<Thread>) threads);
-
-        MvcResult mvcResult2 = mockMvc.perform( MockMvcRequestBuilders.get( "/api/v1/threads" ) ).andReturn();
-
-
-//        ResultActions result = this.mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/threads").accept(MediaType.APPLICATION_JSON_UTF8_VALUE))
-//                .andExpect(MockMvcResultMatchers.status().isOk());
-
-
-        //TODO
+        assertEquals( true, threads.size() > 0 );
     }
 }

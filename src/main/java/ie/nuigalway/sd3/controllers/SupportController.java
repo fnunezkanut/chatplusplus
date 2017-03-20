@@ -20,10 +20,7 @@ public class SupportController {
 
 
     @RequestMapping("/support")
-    public ModelAndView action(
-            ModelMap model,
-            HttpSession session
-    ) {
+    public ModelAndView action(ModelMap model, HttpSession session) {
 
 
         //get current user from session

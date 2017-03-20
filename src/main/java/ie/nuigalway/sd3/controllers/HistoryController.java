@@ -20,11 +20,7 @@ public class HistoryController {
 
 
     @RequestMapping("/history")
-    public ModelAndView action(
-            ModelMap model,
-            HttpSession session
-    ) {
-
+    public ModelAndView action(ModelMap model, HttpSession session) {
 
         //get current user from session
         User currentUser = (User) session.getAttribute("currentUser");
@@ -34,14 +30,12 @@ public class HistoryController {
             return new ModelAndView("redirect:" + app_BASE_URL + "login");
         } else {
 
-
             //pass data to twig view
             model.addAttribute("app_RANDOM", app_RANDOM);
             model.addAttribute("app_BASE_URL", app_BASE_URL);
             model.addAttribute("user_id", currentUser.getId());
             model.addAttribute("user_email", currentUser.getEmail());
             model.addAttribute("user_is_support", currentUser.getIsSupport());
-
 
             //return view name
             return new ModelAndView("history");

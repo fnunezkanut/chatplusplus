@@ -46,11 +46,13 @@ public class MysqlThreadRepositoryTest {
         jdbcTemplate.execute("INSERT INTO threads (\n" +
                 " title,\n" +
                 " dt_created,\n" +
-                " dt_updated\n" +
+                " dt_updated,\n" +
+                " customer_id\n" +
                 ") VALUES (\n" +
                 " \"test\",\n" +
                 " DATE(NOW()),\n" +
-                " DATE(NOW())\n" +
+                " DATE(NOW()),\n" +
+                " 1\n" +
                 ");"
         );
     }
@@ -67,6 +69,20 @@ public class MysqlThreadRepositoryTest {
         List<Thread> threads = this.threadService.getThreads();
         assertEquals(1, threads.size());
     }
+
+
+    @Test
+    public void check_getThreadsByCustomerId() throws Exception {
+
+        long customerId = 1L;
+
+        List<Thread> threads = this.threadService.getThreadsByCustomerId( customerId );
+        assertEquals(1, threads.size());
+
+        assertEquals(true, threads.get(0).getCustomerId().equals( customerId ));
+    }
+
+
 
 
     @Test

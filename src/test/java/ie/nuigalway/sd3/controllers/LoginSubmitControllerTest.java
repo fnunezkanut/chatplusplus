@@ -2,6 +2,7 @@ package ie.nuigalway.sd3.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ie.nuigalway.sd3.ApplicationResponse;
+import ie.nuigalway.sd3.entities.User;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -70,6 +71,14 @@ public class LoginSubmitControllerTest {
         assertEquals( true, ar.getStatus().toLowerCase().equals("ok"));
         assertEquals( true, ar.getMessage().toLowerCase().equals("signedin"));
         assertEquals( 1L, retrievedUserId ); //user id should be 1
+
+
+        MockHttpSession session = (MockHttpSession)mvcResult.getRequest().getSession();
+        User currentUser = (User)session.getAttribute("currentUser");
+
+        //check current user is admin
+        assertEquals( true, currentUser.getId().equals( retrievedUserId ) );
+        assertEquals( true, currentUser.getEmail().equals( email ));
     }
 
 

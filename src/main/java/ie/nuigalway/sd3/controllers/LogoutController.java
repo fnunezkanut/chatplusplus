@@ -21,21 +21,12 @@ public class LogoutController {
 
 
     //shows login page
-    @RequestMapping(
-            value = "/logout",
-            produces = MediaType.TEXT_HTML_VALUE
-    )
-    public ModelAndView action(
-            ModelMap model,
-            HttpSession session
-    ) {
+    @RequestMapping(value = "/logout", produces = MediaType.TEXT_HTML_VALUE)
+    public ModelAndView action(ModelMap model, HttpSession session) {
 
         //remove the current user from session
         session.setAttribute("currentUser", null);
-
-
         session.invalidate();
-
 
         //pass data to twig view
         model.addAttribute("app_RANDOM", app_RANDOM);

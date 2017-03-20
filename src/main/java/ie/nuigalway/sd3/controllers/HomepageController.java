@@ -5,7 +5,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
@@ -22,7 +21,6 @@ public class HomepageController {
     @RequestMapping("/")
     public ModelAndView action(ModelMap model, HttpSession session) {
 
-
         //get current user from session
         User currentUser = (User) session.getAttribute("currentUser");
         if (currentUser == null) {
@@ -33,8 +31,8 @@ public class HomepageController {
 
             //show homepage
             return new ModelAndView("homepage");
-        } else {
-
+        }
+        else {
 
             //redirect if user is signed in to support page
             return new ModelAndView("redirect:" + app_BASE_URL + "support");

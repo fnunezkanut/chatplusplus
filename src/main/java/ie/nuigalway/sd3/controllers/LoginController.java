@@ -22,13 +22,8 @@ public class LoginController {
 
 
     //shows login page
-    @RequestMapping(
-            value = "/login",
-            produces = MediaType.TEXT_HTML_VALUE
-    )
-    public ModelAndView action(
-            ModelMap model,
-            HttpSession session) {
+    @RequestMapping(value = "/login", produces = MediaType.TEXT_HTML_VALUE)
+    public ModelAndView action(ModelMap model, HttpSession session) {
 
         //get current user from session
         User currentUser = (User) session.getAttribute("currentUser");

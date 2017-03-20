@@ -60,7 +60,7 @@ public class ThreadController {
     @RequestMapping(method = RequestMethod.GET, value = "/api/v1/threads", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ApplicationResponse getThreads(HttpSession session) {
 
-/*
+
         //check current user is signed in
         User currentUser = (User) session.getAttribute("currentUser");
         if (currentUser == null) {
@@ -74,7 +74,7 @@ public class ThreadController {
 
             throw new ApplicationException("Current user is not a support person");
         }
-*/
+
 
         //fetch all threads from database
         List<Thread> threads;
@@ -101,4 +101,43 @@ public class ThreadController {
         return ar;
     }
 
+
+
+    //fetching threads for a user
+    @RequestMapping(method = RequestMethod.GET, value = "/api/v1/threads/my", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ApplicationResponse getThreadsMy(HttpSession session) {
+
+
+        //check current user is signed in
+        User currentUser = (User) session.getAttribute("currentUser");
+        if (currentUser == null) {
+
+            throw new ApplicationException("Current user is not signed in");
+        }
+
+
+        //fetch all threads from database
+        List<Thread> threads;
+        try {
+
+            threads = threadService.getThreadsByCustomerId( currentUser.getId() );
+
+        } catch (Exception e) {
+
+            throw new ApplicationException("Unable to fetch threads " + e.getMessage() );
+        }
+
+
+        //convert from a Thread list to a hashmap using java8 streams
+        Map<String, Object> threadMap = threads.stream().collect(
+
+                Collectors.toMap(x -> x.getId().toString(), x -> x)
+        );
+
+
+        //return it all as a JSON response
+        ApplicationResponse ar = new ApplicationResponse("ok", "fetched");
+        ar.setPayload((HashMap<String, Object>) threadMap);
+        return ar;
+    }
 }

@@ -70,11 +70,12 @@ public class MysqlThreadRepository implements ThreadRepository {
     public List<Thread> getThreadsByCustomerId(Long customerId) {
 
         List<Thread> threads = new ArrayList<>();
-        String sqlTxt = "SELECT * FROM threads WHERE customer_id = ? ORDER BY thread.id DESC";
+        String sqlTxt = "SELECT * FROM threads WHERE customer_id = ? ORDER BY threads.id DESC";
 
         try {
 
             threads = jdbcTemplate.query(sqlTxt, threadMapperLambda, customerId);
+
         } catch (Exception e) {
 
             throw new RuntimeException(e);
