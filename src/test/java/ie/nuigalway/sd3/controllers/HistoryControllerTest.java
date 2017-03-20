@@ -64,7 +64,7 @@ public class HistoryControllerTest {
     @Test
     public void check_history_as_customer() throws Exception {
 
-        //fetch admin user and create a mock session for him
+        //fetch customer user and create a mock session for him
         User dbUser = new User();
         String pass = "password";
         String email = "customer@example.com";

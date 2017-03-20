@@ -104,4 +104,140 @@ public class ThreadControllerTest {
 
         assertEquals( true, threads.size() > 0 );
     }
+
+
+    @Test
+    public void test_getThreads_as_unauthorized_user() throws Exception {
+
+
+        MvcResult mvcResult = mockMvc.perform(
+                MockMvcRequestBuilders.get( "/api/v1/threads" )
+                        .contentType(MediaType.APPLICATION_JSON)
+        )
+                .andExpect(status().is4xxClientError() )
+                .andReturn();
+
+    }
+
+
+    @Test
+    public void test_getThreads_as_customer() throws Exception {
+
+        //fetch customer user and create a mock session for him
+        User dbUser = new User();
+        String pass = "password";
+        String email = "customer@example.com";
+        String passwordHash = DigestUtils.md5Hex(pass).toUpperCase();
+        dbUser = userService.getUserByEmailAndPasshash(email, passwordHash);
+        mockSession.setAttribute("currentUser", dbUser);
+
+
+        MvcResult mvcResult = mockMvc.perform(
+                MockMvcRequestBuilders.get( "/api/v1/threads" )
+                        .contentType(MediaType.APPLICATION_JSON)
+        )
+                .andExpect(status().is4xxClientError() )
+                .andReturn();
+
+    }
+
+
+    @Test
+    public void test_getThreadsMy() throws Exception {
+
+
+        //fetch customer user and create a mock session for him
+        User dbUser = new User();
+        String pass = "password";
+        String email = "customer@example.com";
+        String passwordHash = DigestUtils.md5Hex(pass).toUpperCase();
+        dbUser = userService.getUserByEmailAndPasshash(email, passwordHash);
+        mockSession.setAttribute("currentUser", dbUser);
+
+
+
+        MvcResult mvcResult = mockMvc.perform(
+                MockMvcRequestBuilders.get( "/api/v1/threads/my" )
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .session(mockSession)
+        )
+                .andExpect(status().isOk() )
+                .andExpect( content().contentTypeCompatibleWith( MediaType.APPLICATION_JSON_UTF8_VALUE ))
+                .andReturn();
+
+        //get result
+        MockHttpServletResponse response = mvcResult.getResponse();
+
+        //map response to response object
+        ObjectMapper mapper = new ObjectMapper();
+        ApplicationResponse ar = mapper.readValue( response.getContentAsString(), ApplicationResponse.class );
+
+        assertEquals( true, ar.getStatus().toLowerCase().equals("ok"));
+        assertEquals( true, ar.getMessage().toLowerCase().equals("fetched"));
+
+        //examine payload
+        HashMap<String, Object> threads = ar.getPayload();
+
+        assertEquals( true, threads.size() > 0 );
+    }
+
+
+
+    @Test
+    public void test_getThreadsMy_as_unauthorized_user() throws Exception {
+
+
+        MvcResult mvcResult = mockMvc.perform(
+                MockMvcRequestBuilders.get( "/api/v1/threads/my" )
+                        .contentType(MediaType.APPLICATION_JSON)
+        )
+                .andExpect(status().is4xxClientError() )
+                .andReturn();
+
+
+        //get result
+        MockHttpServletResponse response = mvcResult.getResponse();
+
+        //map response to response object
+        ObjectMapper mapper = new ObjectMapper();
+        ApplicationResponse ar = mapper.readValue( response.getContentAsString(), ApplicationResponse.class );
+
+
+        assertEquals( true, ar.getStatus().toLowerCase().equals("error"));
+        assertEquals( true, ar.getMessage().toLowerCase().equals("Current user is not signed in"));
+    }
+
+
+    @Test
+    public void test_getThreadsMy_as_user_with_no_threads() throws Exception {
+
+        //fetch admin user and create a mock session for him
+        User dbUser = new User();
+        String pass = "password";
+        String email = "admin@example.com";
+        String passwordHash = DigestUtils.md5Hex(pass).toUpperCase();
+        dbUser = userService.getUserByEmailAndPasshash(email, passwordHash);
+        mockSession.setAttribute("currentUser", dbUser);
+
+
+        //admin user shouldnt have any entries
+        MvcResult mvcResult = mockMvc.perform(
+                MockMvcRequestBuilders.get( "/api/v1/threads/my" )
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .session(mockSession)
+        )
+                .andExpect(status().isOk())
+                .andReturn();
+
+        //get result
+        MockHttpServletResponse response = mvcResult.getResponse();
+
+        //map response to response object
+        ObjectMapper mapper = new ObjectMapper();
+        ApplicationResponse ar = mapper.readValue( response.getContentAsString(), ApplicationResponse.class );
+
+
+        assertEquals( true, ar.getStatus().toLowerCase().equals("ok"));
+        assertEquals( 0, ar.getPayload().size());
+    }
 }

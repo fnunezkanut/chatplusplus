@@ -102,7 +102,6 @@ public class ThreadController {
     }
 
 
-
     //fetching threads for a user
     @RequestMapping(method = RequestMethod.GET, value = "/api/v1/threads/my", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ApplicationResponse getThreadsMy(HttpSession session) {
@@ -117,15 +116,8 @@ public class ThreadController {
 
 
         //fetch all threads from database
-        List<Thread> threads;
-        try {
+        List<Thread> threads = threadService.getThreadsByCustomerId(currentUser.getId());
 
-            threads = threadService.getThreadsByCustomerId( currentUser.getId() );
-
-        } catch (Exception e) {
-
-            throw new ApplicationException("Unable to fetch threads " + e.getMessage() );
-        }
 
 
         //convert from a Thread list to a hashmap using java8 streams

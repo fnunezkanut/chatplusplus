@@ -45,11 +45,8 @@ public class LoginSubmitController {
 
 
         //update user last updated datetime
-        try {
+        userService.updateDtUpdated(dbUser.getId());
 
-            userService.updateDtUpdated(dbUser.getId());
-        } catch (Exception e) {
-        }
 
 
         //get session value
