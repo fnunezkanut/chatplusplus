@@ -110,37 +110,21 @@ public class ChatSubmitController {
 
         //only add a message if its larger than 1 character in length
         String message = jsonMap.get("message");
+        boolean added = false;
         if (message.length() > 1) {
 
             //add new message to this thread
-            try {
+            messageService.addMessageToThread(dbThread.getId(), dbUser.getId(), message);
 
-                messageService.addMessageToThread(dbThread.getId(), dbUser.getId(), message);
-            } catch (Exception e) {
+            //update thread last updated datetime
+            threadService.updateDtUpdated( dbThread.getId() );
 
-                return new ApplicationResponse("error", e.getMessage() );
-            }
+            added = true;
         }
 
 
         //fetch all the messages for this thread (in reverse order)
-        List<MessageView1> messages;
-        try {
-
-            messages = messageService.getMessagesByThreadId(dbThread.getId());
-        } catch (Exception e) {
-
-            return new ApplicationResponse("error", e.getMessage() );
-        }
-
-
-
-        //update thread last updated datetime
-        try{
-
-            threadService.updateDtUpdated( dbThread.getId() );
-        }
-        catch (Exception e){}
+        List<MessageView1> messages = messageService.getMessagesByThreadId(dbThread.getId());
 
 
 
@@ -151,7 +135,14 @@ public class ChatSubmitController {
         );
 
 
-        ApplicationResponse ar = new ApplicationResponse("ok", "added");
+        //response message changes depending on if we are just retrieving messages or adding+ retrieving
+        String responseMsg = "retrieved";
+        if( added == true ){
+            responseMsg = "added";
+        }
+
+
+        ApplicationResponse ar = new ApplicationResponse("ok", responseMsg );
         ar.setPayload( (HashMap<String, Object>) messagesMap );
         return ar;
     }

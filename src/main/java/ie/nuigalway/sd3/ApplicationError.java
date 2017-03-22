@@ -1,6 +1,6 @@
 /**
  * @file ApplicationError.java
- *
+ * <p>
  * shows custom error page instead of the default whitelabel error page
  */
 
@@ -9,17 +9,13 @@ package ie.nuigalway.sd3;
 import org.springframework.boot.autoconfigure.web.ErrorAttributes;
 import org.springframework.boot.autoconfigure.web.ErrorController;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.context.request.RequestAttributes;
-import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Map;
 
 @Controller
 public class ApplicationError implements ErrorController {
@@ -38,19 +34,19 @@ public class ApplicationError implements ErrorController {
     public ModelAndView errorHtml(HttpServletRequest request, ModelMap model) {
 
         HttpStatus status = getStatus(request);
-        model.addAttribute("errorMsg", status.value() + " " + status.getReasonPhrase() );
+        model.addAttribute("errorMsg", status.value() + " " + status.getReasonPhrase());
 
         //return view name
         return new ModelAndView("_error");
     }
 
     //JSON, XML error view
-    @RequestMapping(value = ERROR_PATH )
+    @RequestMapping(value = ERROR_PATH)
     @ResponseBody
     public ApplicationResponse error(HttpServletRequest request) {
 
         HttpStatus status = getStatus(request);
-        return new ApplicationResponse( "error", status.value() + " " + status.getReasonPhrase() );
+        return new ApplicationResponse("error", status.value() + " " + status.getReasonPhrase());
     }
 
 
@@ -68,7 +64,8 @@ public class ApplicationError implements ErrorController {
             try {
 
                 return HttpStatus.valueOf(statusCode);
-            } catch (Exception ex) {}
+            } catch (Exception ex) {
+            }
         }
         return HttpStatus.INTERNAL_SERVER_ERROR;
     }
