@@ -28,7 +28,6 @@ public class ApplicationConfiguration extends WebMvcConfigurerAdapter implements
     @Autowired
     private Environment env;
 
-
     //mysql connection datasource
     @Bean(name = "dataSource")
     @Profile({"default", "test", "prod"})
@@ -44,8 +43,6 @@ public class ApplicationConfiguration extends WebMvcConfigurerAdapter implements
         return dataSource;
     }
     //mysql connection datasource
-
-
 
     //configures jtwig
     @Override
@@ -66,7 +63,6 @@ public class ApplicationConfiguration extends WebMvcConfigurerAdapter implements
         viewResolver.setSuffix(".twig");
     }
     //configures jtwig
-
 
     //configures static file loading
     @Override

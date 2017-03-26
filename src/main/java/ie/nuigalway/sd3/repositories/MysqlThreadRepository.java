@@ -2,6 +2,7 @@ package ie.nuigalway.sd3.repositories;
 
 import ie.nuigalway.sd3.entities.Thread;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Profile;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -28,7 +29,7 @@ public class MysqlThreadRepository implements ThreadRepository {
     private JdbcTemplate jdbcTemplate;
 
     @Autowired
-    public MysqlThreadRepository(DataSource dataSource) {
+    public MysqlThreadRepository(@Qualifier("dataSource") DataSource dataSource) {
 
         jdbcTemplate = new JdbcTemplate(dataSource);
     }

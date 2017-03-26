@@ -25,7 +25,6 @@ public class UserService {
         return userRepository.getUserByEmailAndPasshash(email, passhash);
     }
 
-
     public void updateDtUpdated(Long userId) {
 
         userRepository.updateDtUpdated(userId);

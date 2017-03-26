@@ -2,6 +2,7 @@ package ie.nuigalway.sd3.repositories;
 
 import ie.nuigalway.sd3.entities.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Profile;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -22,11 +23,10 @@ public class MysqlUserRepository implements UserRepository {
     private JdbcTemplate jdbcTemplate;
 
     @Autowired
-    public MysqlUserRepository(DataSource dataSource) {
+    public MysqlUserRepository(@Qualifier("dataSource") DataSource dataSource) {
 
         jdbcTemplate = new JdbcTemplate(dataSource);
     }
-
 
     //mapping sql result rows to User objects
     private RowMapper<User> userMapperLambda = (rs, rowNum) -> {

@@ -4,6 +4,7 @@ import ie.nuigalway.sd3.entities.Message;
 import ie.nuigalway.sd3.entities.MessageView1;
 import ie.nuigalway.sd3.entities.Thread;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Profile;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.InvalidResultSetAccessException;
@@ -20,6 +21,7 @@ import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 
@@ -32,7 +34,7 @@ public class MysqlMessageRepository implements MessageRepository {
     private JdbcTemplate jdbcTemplate;
 
     @Autowired
-    public MysqlMessageRepository(DataSource dataSource) {
+    public MysqlMessageRepository(@Qualifier("dataSource") DataSource dataSource) {
 
         jdbcTemplate = new JdbcTemplate(dataSource);
     }
@@ -107,7 +109,7 @@ public class MysqlMessageRepository implements MessageRepository {
 
 
         //current time used at insert time
-        java.util.Date dt = new java.util.Date();
+        Date dt = new Date();
         DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 
 

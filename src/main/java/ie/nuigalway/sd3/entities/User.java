@@ -17,7 +17,6 @@ public class User implements Serializable {
     }
     //constructors
 
-
     //getters and setters
     public Long getId() {
         return id;

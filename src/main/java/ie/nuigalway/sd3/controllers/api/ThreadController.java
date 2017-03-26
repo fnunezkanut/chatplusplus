@@ -24,7 +24,6 @@ public class ThreadController {
     @Autowired
     private ThreadService threadService;
 
-
     //creating a thread with a title and a user_id (extracted from session)
     @RequestMapping(method = RequestMethod.POST, value = "/api/v1/threads", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ApplicationResponse createThread(HttpSession session, @RequestParam("title") String title) {
@@ -36,11 +35,8 @@ public class ThreadController {
             throw new ApplicationException("Current user is not signed in");
         }
 
-
         //create a new thread
         Long newThreadId = threadService.createThread(title, currentUser.getId());
-
-
 
         //output successful json
         ApplicationResponse ar = new ApplicationResponse("ok", "created");
@@ -48,11 +44,9 @@ public class ThreadController {
         return ar;
     }
 
-
     //fetching all threads
     @RequestMapping(method = RequestMethod.GET, value = "/api/v1/threads", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ApplicationResponse getThreads(HttpSession session) {
-
 
         //check current user is signed in
         User currentUser = (User) session.getAttribute("currentUser");
@@ -61,24 +55,20 @@ public class ThreadController {
             throw new ApplicationException("Current user is not signed in");
         }
 
-
         //check current user is support person
         if (!currentUser.getIsSupport()) {
 
             throw new ApplicationException("Current user is not a support person");
         }
 
-
         //fetch all threads from database
         List<Thread> threads = threads = threadService.getThreads();
-
 
         //convert from a Thread list to a hashmap using java8 streams
         Map<String, Object> threadMap = threads.stream().collect(
 
                 Collectors.toMap(x -> x.getId().toString(), x -> x)
         );
-
 
         //return it all as a JSON response
         ApplicationResponse ar = new ApplicationResponse("ok", "fetched");
@@ -91,7 +81,6 @@ public class ThreadController {
     @RequestMapping(method = RequestMethod.GET, value = "/api/v1/threads/my", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ApplicationResponse getThreadsMy(HttpSession session) {
 
-
         //check current user is signed in
         User currentUser = (User) session.getAttribute("currentUser");
         if (currentUser == null) {
@@ -99,17 +88,14 @@ public class ThreadController {
             throw new ApplicationException("Current user is not signed in");
         }
 
-
         //fetch all threads from database
         List<Thread> threads = threadService.getThreadsByCustomerId(currentUser.getId());
-
 
         //convert from a Thread list to a hashmap using java8 streams
         Map<String, Object> threadMap = threads.stream().collect(
 
                 Collectors.toMap(x -> x.getId().toString(), x -> x)
         );
-
 
         //return it all as a JSON response
         ApplicationResponse ar = new ApplicationResponse("ok", "fetched");
