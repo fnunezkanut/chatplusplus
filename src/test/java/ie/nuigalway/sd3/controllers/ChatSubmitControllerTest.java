@@ -46,7 +46,7 @@ public class ChatSubmitControllerTest {
     @Test
     public void should_response_with_invalid_input() throws Exception {
 
-        long threadId = 9L;
+        long threadId = 1L;
 
         StompSession session = stompClient
                 .connect(WEBSOCKET_URI, new StompSessionHandlerAdapter() {} )
@@ -65,7 +65,7 @@ public class ChatSubmitControllerTest {
     @Test
     public void should_add_message_to_thread() throws Exception {
 
-        long threadId = 9L;
+        long threadId = 1L;
 
         StompSession session = stompClient
                 .connect(WEBSOCKET_URI, new StompSessionHandlerAdapter() {} )
@@ -91,7 +91,7 @@ public class ChatSubmitControllerTest {
     @Test
     public void should_fetch_messages_for_thread() throws Exception {
 
-        long threadId = 9L;
+        long threadId = 1L;
 
         StompSession session = stompClient
                 .connect(WEBSOCKET_URI, new StompSessionHandlerAdapter() {} )
@@ -118,7 +118,7 @@ public class ChatSubmitControllerTest {
     @Test
     public void should_fail_as_no_user_id() throws Exception {
 
-        long threadId = 9L;
+        long threadId = 1L;
 
         StompSession session = stompClient
                 .connect(WEBSOCKET_URI, new StompSessionHandlerAdapter() {} )
