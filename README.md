@@ -1,6 +1,7 @@
-# prototype2
-prototype #2 of the chatplusplus application
+# chatplusplus
 
 a websocket chat written with Java Spring
 
-continued @ https://github.com/fnunezkanut/chatplusplus/
+continued from https://github.com/fnunezkanut/prototype2
+
+more documentation to come...
